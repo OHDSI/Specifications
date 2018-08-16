@@ -1,0 +1,1414 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "Defines a Cohort Definition",
+    "url" : "https://github.com/OHDSI/Specifications/v0.9.0/CohortDefinition"
+  } ],
+  "info" : {
+    "description" : "Cohort Definition based on OHDSI WebAPI definition namespace (https://github.com/OHDSI/WebAPI/tree/master/src/main/java/org/ohdsi/webapi/cohortdefinition) and OHDSI circe-be Cohort Definition namespace (https://github.com/OHDSI/circe-be/tree/master/src/main/java/org/ohdsi/circe/cohortdefinition)",
+    "version" : "0.9.0",
+    "title" : "Cohort Definition",
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "paths" : {
+    "/" : {
+      "get" : {
+        "summary" : "Get a list of cohort definitions",
+        "operationId" : "getCohortDefinitionList",
+        "description" : "This is a placholder",
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CohortDefinition"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "CohortDefinition" : {
+        "type" : "object",
+        "description" : "Based on https://github.com/OHDSI/WebAPI/blob/master/src/main/java/org/ohdsi/webapi/cohortdefinition/CohortDefinition.java",
+        "properties" : {
+          "createdBy" : {
+            "type" : "string"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "details" : {
+            "$ref" : "#/components/schemas/CohortDefinitionDetails"
+          },
+          "expressionType" : {
+            "type" : "string",
+            "enum" : [ "SIMPLE_EXPRESSION", "CUSTOM_SQL", "EXTERNAL_SOURCED" ]
+          },
+          "generationInfoList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CohortGenerationInfo"
+            }
+          },
+          "id" : {
+            "type" : "integer"
+          },
+          "modifiedBy" : {
+            "type" : "string"
+          },
+          "modifiedDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "serialVersionUID" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }
+      },
+      "CohortDefinitionDetails" : {
+        "type" : "object",
+        "description" : "Based on https://github.com/OHDSI/WebAPI/blob/master/src/main/java/org/ohdsi/webapi/cohortdefinition/CohortDefinitionDetails.java",
+        "properties" : {
+          "definition" : {
+            "$ref" : "#/components/schemas/CohortDefinition"
+          },
+          "expression" : {
+            "oneOf" : [ {
+              "type" : "string"
+            }, {
+              "$ref" : "#/components/schemas/CohortExpression"
+            } ]
+          },
+          "id" : {
+            "type" : "integer"
+          },
+          "serialVersionUID" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }
+      },
+      "CohortExpression" : {
+        "type" : "object",
+        "required" : [ "title" ],
+        "description" : "Based on circe-be: https://github.com/OHDSI/circe-be/blob/master/src/main/java/org/ohdsi/circe/cohortdefinition/CohortExpression.java",
+        "properties" : {
+          "additionalCriteria" : {
+            "$ref" : "#/components/schemas/CriteriaGroup"
+          },
+          "censorWindow" : {
+            "$ref" : "#/components/schemas/Period"
+          },
+          "censoringCriteria" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Criteria"
+            }
+          },
+          "collapseSettings" : {
+            "$ref" : "#/components/schemas/CollapseSettings"
+          },
+          "conceptSets" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ConceptSet"
+            }
+          },
+          "endStrategy" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/DateOffsetStrategy"
+            }, {
+              "$ref" : "#/components/schemas/CustomEraStrategy"
+            } ]
+          },
+          "expressionLimit" : {
+            "$ref" : "#/components/schemas/ResultLimit"
+          },
+          "inclusionRules" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/InclusionRule"
+            }
+          },
+          "primaryCriteria" : {
+            "$ref" : "#/components/schemas/PrimaryCriteria"
+          },
+          "qualifiedLimit" : {
+            "$ref" : "#/components/schemas/ResultLimit"
+          },
+          "title" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CohortGenerationInfo" : {
+        "type" : "object",
+        "description" : "Based on https://github.com/OHDSI/WebAPI/blob/master/src/main/java/org/ohdsi/webapi/cohortdefinition/CohortGenerationInfo.java",
+        "properties" : {
+          "cohortDefinition" : {
+            "$ref" : "#/components/schemas/CohortDefinition"
+          },
+          "executionDuration" : {
+            "type" : "integer"
+          },
+          "failMessage" : {
+            "type" : "string"
+          },
+          "id" : {
+            "$ref" : "#/components/schemas/CohortGenerationInfoId"
+          },
+          "includeFeatures" : {
+            "type" : "boolean"
+          },
+          "isValid" : {
+            "type" : "boolean"
+          },
+          "personCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "recordCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "serialVersionUID" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "startTime" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "ERROR", "PENDING", "RUNNING", "COMPLETE" ]
+          }
+        }
+      },
+      "CohortGenerationInfoId" : {
+        "type" : "object",
+        "properties" : {
+          "cohortDefinitionId" : {
+            "type" : "integer"
+          },
+          "serialVersionId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "sourceId" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "CriteriaGroup" : {
+        "type" : "object",
+        "description" : "The criteria group",
+        "properties" : {
+          "count" : {
+            "type" : "integer"
+          },
+          "criteriaList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CorelatedCriteria"
+            }
+          },
+          "demographicCriteriaList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DemographicCriteria"
+            }
+          },
+          "groups" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CriteriaGroup"
+            }
+          },
+          "type" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Period" : {
+        "type" : "object",
+        "description" : "Defines a period of time",
+        "properties" : {
+          "startDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "endDate" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "CollapseSettings" : {
+        "type" : "object",
+        "description" : "Defines collapse settings",
+        "properties" : {
+          "collapseType" : {
+            "type" : "string",
+            "enum" : [ "ERA" ]
+          },
+          "eraPad" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "ConceptSet" : {
+        "type" : "object",
+        "$ref" : "ConceptSet.json#ConceptSet"
+      },
+      "Concept" : {
+        "type" : "object",
+        "$ref" : "ConceptSet.json#Concept"
+      },
+      "EndStrategy" : {
+        "type" : "object",
+        "description" : "Abstract base class for defining end strategies"
+      },
+      "ResultLimit" : {
+        "type" : "object",
+        "description" : "The result limit",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "default" : "First"
+          }
+        }
+      },
+      "InclusionRule" : {
+        "type" : "object",
+        "description" : "An inclusion rule",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "expression" : {
+            "$ref" : "#/components/schemas/CriteriaGroup"
+          }
+        }
+      },
+      "PrimaryCriteria" : {
+        "type" : "object",
+        "description" : "The primary criteria for the cohort expression",
+        "properties" : {
+          "criteriaList" : {
+            "type" : "array",
+            "items" : {
+              "anyOf" : [ {
+                "$ref" : "#/components/schemas/ConditionEra"
+              }, {
+                "$ref" : "#/components/schemas/ConditionOccurrence"
+              }, {
+                "$ref" : "#/components/schemas/Death"
+              }, {
+                "$ref" : "#/components/schemas/DeviceExposure"
+              }, {
+                "$ref" : "#/components/schemas/DoseEra"
+              }, {
+                "$ref" : "#/components/schemas/DrugEra"
+              }, {
+                "$ref" : "#/components/schemas/DrugExposure"
+              }, {
+                "$ref" : "#/components/schemas/Measurement"
+              }, {
+                "$ref" : "#/components/schemas/Observation"
+              }, {
+                "$ref" : "#/components/schemas/ObservationPeriod"
+              }, {
+                "$ref" : "#/components/schemas/PayerPlanPeriod"
+              }, {
+                "$ref" : "#/components/schemas/ProcedureOccurrence"
+              }, {
+                "$ref" : "#/components/schemas/Specimen"
+              }, {
+                "$ref" : "#/components/schemas/VisitOccurrence"
+              } ]
+            }
+          },
+          "observationWindow" : {
+            "$ref" : "#/components/schemas/ObservationFilter"
+          },
+          "primaryLimit" : {
+            "$ref" : "#/components/schemas/ResultLimit"
+          }
+        }
+      },
+      "ObservationFilter" : {
+        "type" : "object",
+        "description" : "Filter for an observation",
+        "properties" : {
+          "priorDays" : {
+            "type" : "integer"
+          },
+          "postDays" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "Criteria" : {
+        "type" : "object",
+        "description" : "The criteria that defines the correlated criteria",
+        "properties" : {
+          "CorrelatedCriteria" : {
+            "$ref" : "#/components/schemas/CriteriaGroup"
+          }
+        }
+      },
+      "CorelatedCriteria" : {
+        "type" : "object",
+        "description" : "The coreleated criteria",
+        "properties" : {
+          "criteria" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/ConditionEra"
+            }, {
+              "$ref" : "#/components/schemas/ConditionOccurrence"
+            }, {
+              "$ref" : "#/components/schemas/Death"
+            }, {
+              "$ref" : "#/components/schemas/DeviceExposure"
+            }, {
+              "$ref" : "#/components/schemas/DoseEra"
+            }, {
+              "$ref" : "#/components/schemas/DrugEra"
+            }, {
+              "$ref" : "#/components/schemas/DrugExposure"
+            }, {
+              "$ref" : "#/components/schemas/Measurement"
+            }, {
+              "$ref" : "#/components/schemas/Observation"
+            }, {
+              "$ref" : "#/components/schemas/ObservationPeriod"
+            }, {
+              "$ref" : "#/components/schemas/PayerPlanPeriod"
+            }, {
+              "$ref" : "#/components/schemas/ProcedureOccurrence"
+            }, {
+              "$ref" : "#/components/schemas/Specimen"
+            }, {
+              "$ref" : "#/components/schemas/VisitOccurrence"
+            } ]
+          },
+          "endWindow" : {
+            "$ref" : "#/components/schemas/Window"
+          },
+          "occurrence" : {
+            "$ref" : "#/components/schemas/Occurrence"
+          },
+          "restrictVisit" : {
+            "type" : "boolean"
+          },
+          "startWindow" : {
+            "$ref" : "#/components/schemas/Window"
+          }
+        }
+      },
+      "DemographicCriteria" : {
+        "type" : "object",
+        "description" : "Demographic criteria",
+        "properties" : {
+          "age" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "race" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "ethnicity" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "occurrenceStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "occurrenceEndDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          }
+        }
+      },
+      "Window" : {
+        "type" : "object",
+        "description" : "A time window for criteria",
+        "properties" : {
+          "end" : {
+            "$ref" : "#/components/schemas/Endpoint"
+          },
+          "start" : {
+            "$ref" : "#/components/schemas/Endpoint"
+          },
+          "useEventEnd" : {
+            "type" : "boolean"
+          },
+          "useIndexEnd" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "Occurrence" : {
+        "type" : "object",
+        "description" : "The event occurrence definition",
+        "properties" : {
+          "type" : {
+            "type" : "integer",
+            "description" : "The type of occurrence; '0' is 'EXACTLY', '1' is 'AT MOST', '2' is 'AT LEAST'",
+            "enum" : [ 0, 1, 2 ]
+          },
+          "count" : {
+            "type" : "integer"
+          },
+          "isDistinct" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "Endpoint" : {
+        "type" : "object",
+        "description" : "The endpoint definition",
+        "properties" : {
+          "coeff" : {
+            "type" : "integer"
+          },
+          "days" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "DateOffsetStrategy" : {
+        "description" : "The date offset strategy",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/EndStrategy"
+        } ],
+        "properties" : {
+          "dateField" : {
+            "type" : "string",
+            "default" : "StartDate",
+            "enum" : [ "StartDate", "EndDate" ]
+          },
+          "offset" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "CustomEraStrategy" : {
+        "description" : "The drug custom era strategy",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/EndStrategy"
+        } ],
+        "properties" : {
+          "drugCodesetId" : {
+            "type" : "integer"
+          },
+          "gapDays" : {
+            "type" : "integer",
+            "default" : 0
+          },
+          "offset" : {
+            "type" : "integer",
+            "default" : 0
+          }
+        }
+      },
+      "NumericRange" : {
+        "type" : "object",
+        "description" : "The numeric range definition",
+        "properties" : {
+          "extent" : {
+            "type" : "number"
+          },
+          "op" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "number"
+          }
+        }
+      },
+      "DateRange" : {
+        "type" : "object",
+        "description" : "The date range definition",
+        "properties" : {
+          "extent" : {
+            "type" : "number"
+          },
+          "op" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "number"
+          }
+        }
+      },
+      "ConditionEra" : {
+        "type" : "object",
+        "description" : "TODO",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "ageAtEnd" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "ageAtStart" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "eraEndDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "eraLength" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "eraStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gapDays" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "occurrenceCount" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          }
+        }
+      },
+      "ConditionOccurrence" : {
+        "type" : "object",
+        "description" : "Condition Occurrence Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "age" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "conditionSourceConcept" : {
+            "type" : "integer"
+          },
+          "conditionTypeExclude" : {
+            "type" : "boolean"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "occurrenceEndDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "occurrenceStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "providerSpecialty" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "stopReason" : {
+            "$ref" : "#/components/schemas/TextFilter"
+          },
+          "visitType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          }
+        }
+      },
+      "Death" : {
+        "type" : "object",
+        "description" : "Death Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "age" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "deathSourceConcept" : {
+            "type" : "integer"
+          },
+          "deathType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "deathTypeExclude" : {
+            "type" : "boolean"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "occurrenceStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          }
+        }
+      },
+      "DeviceExposure" : {
+        "type" : "object",
+        "description" : "Device Exposure Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "age" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "deviceSourceConcept" : {
+            "type" : "integer"
+          },
+          "deviceType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "deviceTypeExclude" : {
+            "type" : "boolean"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "occurrenceEndDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "occurrenceStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "providerSpecialty" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "quantity" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "uniqueDeviceId" : {
+            "$ref" : "#/components/schemas/TextFilter"
+          },
+          "visitType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          }
+        }
+      },
+      "DoseEra" : {
+        "type" : "object",
+        "description" : "Dose Era Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "ageAtEnd" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "ageAtStart" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "doseValue" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "eraEndDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "eraLength" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "eraStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "unit" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          }
+        }
+      },
+      "DrugEra" : {
+        "type" : "object",
+        "description" : "Drug Era Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "ageAtEnd" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "ageAtStart" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "eraEndDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "eraLength" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "eraStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gapDays" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "occurrenceCount" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          }
+        }
+      },
+      "DrugExposure" : {
+        "type" : "object",
+        "description" : "Drug Exposure Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "age" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "daysSupply" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "doseUnit" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "drugSourceConcept" : {
+            "type" : "integer"
+          },
+          "drugType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "drugTypeExclude" : {
+            "type" : "boolean"
+          },
+          "effectiveDrugDose" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NumericRange"
+            }
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "lotNumber" : {
+            "$ref" : "#/components/schemas/TextFilter"
+          },
+          "occurrenceEndDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "occurrenceStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "providerSpecialty" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "quantity" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "refils" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "routeConcept" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "stopReason" : {
+            "$ref" : "#/components/schemas/TextFilter"
+          },
+          "visitType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          }
+        }
+      },
+      "Measurement" : {
+        "type" : "object",
+        "description" : "Measurement Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "abnormal" : {
+            "type" : "boolean"
+          },
+          "age" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "measurementSourceConcept" : {
+            "type" : "integer"
+          },
+          "measurementType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "measurementTypeExclude" : {
+            "type" : "boolean"
+          },
+          "occurrenceStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "operator" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "providerSpecialty" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "rangeHigh" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "rangeHighRatio" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "rangeLow" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "rangeLowRatio" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "unit" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "valueAsConcept" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "valueAsNumber" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NumericRange"
+            }
+          },
+          "visitType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          }
+        }
+      },
+      "Observation" : {
+        "type" : "object",
+        "description" : "Observation Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "age" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "observationSourceConcept" : {
+            "type" : "integer"
+          },
+          "observationType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "observationTypeExclude" : {
+            "type" : "boolean"
+          },
+          "occurrenceStartdsate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "quantity" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NumericRange"
+            }
+          },
+          "providerSpecialty" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "qualifier" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "unit" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "valueAsConcept" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "valueAsNumber" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "valueAsString" : {
+            "$ref" : "#/components/schemas/TextFilter"
+          },
+          "visitType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          }
+        }
+      },
+      "ObservationPeriod" : {
+        "type" : "object",
+        "description" : "Observation Period Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "ageAtEnd" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "ageAtStart" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "periodEndDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "periodLength" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "periodStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "periodType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "userDefinedPeriod" : {
+            "$ref" : "#/components/schemas/Period"
+          }
+        }
+      },
+      "PayerPlanPeriod" : {
+        "type" : "object",
+        "description" : "Payer Plan Period Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "ageAtEnd" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "ageAtStart" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "payerConcept" : {
+            "type" : "integer"
+          },
+          "payerSourceConcept" : {
+            "type" : "integer"
+          },
+          "periodEndDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "periodLength" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "periodStartDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "planConcept" : {
+            "type" : "integer"
+          },
+          "planSourceConcept" : {
+            "type" : "integer"
+          },
+          "sponsorConcept" : {
+            "type" : "integer"
+          },
+          "sponsorSourceConcept" : {
+            "type" : "integer"
+          },
+          "stopReasonConcept" : {
+            "type" : "integer"
+          },
+          "stopReasonSourceConcept" : {
+            "type" : "integer"
+          },
+          "userDefinedPeriod" : {
+            "$ref" : "#/components/schemas/Period"
+          }
+        }
+      },
+      "ProcedureOccurrence" : {
+        "type" : "object",
+        "description" : "Procedure Occurrence Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "age" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "modifier" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "occurrenceStartdsate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "procedureSourceConcept" : {
+            "type" : "integer"
+          },
+          "procedureType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "procedureTypeExclude" : {
+            "type" : "boolean"
+          },
+          "providerSpecialty" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "quantity" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NumericRange"
+            }
+          },
+          "visitType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          }
+        }
+      },
+      "Specimen" : {
+        "type" : "object",
+        "description" : "Specimen Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "age" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "anatomicSite" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "diseaseState" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "occurrenceStartdsate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "quantity" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NumericRange"
+            }
+          },
+          "sourceId" : {
+            "$ref" : "#/components/schemas/TextFilter"
+          },
+          "specimenSourceConcept" : {
+            "type" : "integer"
+          },
+          "specimenType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "specimenTypeExclude" : {
+            "type" : "boolean"
+          },
+          "unit" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          }
+        }
+      },
+      "VisitOccurrence" : {
+        "type" : "object",
+        "description" : "Visit Occurrence Criteria",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Criteria"
+        } ],
+        "properties" : {
+          "age" : {
+            "$ref" : "#/components/schemas/NumericRange"
+          },
+          "codesetId" : {
+            "type" : "integer"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "gender" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "occurrenceEndDate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "occurrenceStartdsate" : {
+            "$ref" : "#/components/schemas/DateRange"
+          },
+          "placeOfService" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "providerSpecialty" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "visitLength" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NumericRange"
+            }
+          },
+          "visitSourceConcept" : {
+            "type" : "integer"
+          },
+          "visitType" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Concept"
+            }
+          },
+          "visitTypeExclude" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "TextFilter" : {
+        "type" : "object",
+        "description" : "A text filter",
+        "properties" : {
+          "op" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
