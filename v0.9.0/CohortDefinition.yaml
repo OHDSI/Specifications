@@ -16,7 +16,7 @@ paths:
       summary: Get a list of cohort definitions
       operationId: getCohortDefinitionList
       description: |
-        This is a placholder
+        This is a placeholder method
       responses:
         '200':
           description: search results matching criteria
@@ -210,7 +210,7 @@ components:
       $ref: 'ConceptSet.yaml#ConceptSet'
     Concept:
       type: object
-      description: 'Placholder - reference is defined at https://app.swaggerhub.com/apis/anthonysena5/ConceptSetExpression/1.0.0'
+      $ref: 'ConceptSet.yaml#Concept'
     EndStrategy:
       type: object
       description: Abstract base class for defining end strategies
