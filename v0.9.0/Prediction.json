@@ -1,0 +1,597 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "Patient Level Prediction (PLP) Study Specification",
+    "url" : "https://github.com/OHDSI/Specifications/v0.9.0/Prediction"
+  } ],
+  "info" : {
+    "description" : "Patient Level Prediction",
+    "version" : "0.9.0",
+    "title" : "Patient Level Prediction",
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "paths" : {
+    "/" : {
+      "get" : {
+        "summary" : "Get a list of PLP studies",
+        "operationId" : "getPLPs",
+        "description" : "This is a placeholder method",
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PatientLevelPredictionAnalysis"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "PatientLevelPredictionAnalysis" : {
+        "description" : "Fully describes all dependencies required to execute a PLP analysis using the PatientLevelPrediction package (v2_0_5)",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Identifier for the PLP specification"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Name for the PLP specification"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "Version number of the specification for use by the hydration package"
+          },
+          "createdBy" : {
+            "type" : "string",
+            "description" : "The person who created the analysis"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "description" : "The date and time the estimation was first saved"
+          },
+          "modifiedBy" : {
+            "type" : "string",
+            "description" : "The last person to modify the analysis"
+          },
+          "modifiedDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "description" : "The date and time the estimation was last saved"
+          },
+          "cohortDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CohortDefinition"
+            }
+          },
+          "conceptSets" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ConceptSet"
+            }
+          },
+          "patientLevelPredictionAnalysisSettings" : {
+            "$ref" : "#/components/schemas/PatientLevelPredictionAnalysisSettings"
+          }
+        },
+        "type" : "object"
+      },
+      "PatientLevelPredictionAnalysisSettings" : {
+        "description" : "Holds the settings for a patient level prediction analysis",
+        "properties" : {
+          "targetOutcomes" : {
+            "type" : "array",
+            "description" : "The target and outcome  cohort identifiers",
+            "items" : {
+              "$ref" : "#/components/schemas/TargetOutcomes"
+            }
+          },
+          "getDbPLPDataArgs" : {
+            "$ref" : "#/components/schemas/GetDbPLPDataArgs"
+          },
+          "createStudyPopArgs" : {
+            "$ref" : "#/components/schemas/CreateStudyPopulationArgs"
+          },
+          "runPLPArgs" : {
+            "$ref" : "#/components/schemas/RunPLPArgs"
+          }
+        },
+        "type" : "object"
+      },
+      "PredictionModelSettings" : {
+        "description" : "Base class for a prediction model",
+        "properties" : {
+          "modelType" : {
+            "type" : "string",
+            "description" : "Identifier for the model type"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Description of the model type"
+          }
+        }
+      },
+      "NaiveBayesModelSettings" : {
+        "description" : "Specification for a Naive Bayes model",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/PredictionModelSettings"
+        } ]
+      },
+      "RandomForestSettings" : {
+        "description" : "Specification for a Random Forest model",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/PredictionModelSettings"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "mtries" : {
+              "type" : "integer",
+              "description" : "The number of features to include in each tree (-1 defaults to square root of total features)",
+              "default" : -1
+            },
+            "ntrees" : {
+              "type" : "integer",
+              "description" : "The number of trees to build",
+              "default" : 500
+            },
+            "maxDepth" : {
+              "type" : "array",
+              "description" : "Maximum number of interactions - a large value will lead to slow model training",
+              "items" : {
+                "type" : "number",
+                "format" : "integer"
+              },
+              "default" : [ 4, 10, 17 ]
+            },
+            "varImp" : {
+              "type" : "boolean",
+              "description" : "Perform an initial variable selection prior to fitting the model to select the useful variables",
+              "default" : true
+            },
+            "seed" : {
+              "type" : "number",
+              "format" : "float",
+              "description" : "An option to add a seed when training the final model",
+              "default" : null
+            }
+          }
+        } ]
+      },
+      "MultilayerPerceptionModelSettings" : {
+        "description" : "Specification for a Multiayer Perception Model",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/PredictionModelSettings"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "size" : {
+              "type" : "integer",
+              "description" : "The number of hidden nodes",
+              "default" : 4
+            },
+            "alpha" : {
+              "type" : "number",
+              "format" : "float",
+              "description" : "The L2 regularisation",
+              "default" : 1.0E-5
+            },
+            "seed" : {
+              "type" : "number",
+              "format" : "float",
+              "description" : "An option to add a seed when training the final model",
+              "default" : null
+            }
+          }
+        } ]
+      },
+      "KNearestNeighborsSettings" : {
+        "description" : "Specification for a K Nearest Neighbors Model",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/PredictionModelSettings"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "k" : {
+              "type" : "integer",
+              "description" : "The number of neighbors to consider",
+              "default" : 1000
+            },
+            "indexFolder" : {
+              "type" : "string",
+              "description" : "The directory where the results and intermediate steps are output"
+            }
+          }
+        } ]
+      },
+      "GradientBoostingMachineSettings" : {
+        "description" : "Specification for a Gradient Boosting Machine Model",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/PredictionModelSettings"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "ntrees" : {
+              "type" : "array",
+              "description" : "The number of trees to build",
+              "items" : {
+                "type" : "number",
+                "format" : "integer"
+              },
+              "default" : [ 10, 100 ]
+            },
+            "nthread" : {
+              "type" : "integer",
+              "description" : "The number of computer threads to (how many cores do you have?)",
+              "default" : 20
+            },
+            "maxDepth" : {
+              "type" : "array",
+              "description" : "Maximum number of interactions - a large value will lead to slow model training",
+              "items" : {
+                "type" : "number",
+                "format" : "integer"
+              },
+              "default" : [ 4, 6, 17 ]
+            },
+            "minRows" : {
+              "type" : "integer",
+              "description" : "The minimum number of rows required at each end node of the tree",
+              "default" : 20
+            },
+            "learnRate" : {
+              "type" : "array",
+              "description" : "The boosting learn rate",
+              "items" : {
+                "type" : "number",
+                "format" : "float"
+              },
+              "default" : [ 0.01, 0.1 ]
+            },
+            "seed" : {
+              "type" : "number",
+              "format" : "float",
+              "description" : "An option to add a seed when training the final model",
+              "default" : null
+            }
+          }
+        } ]
+      },
+      "DecisionTreeSettings" : {
+        "description" : "Specification for a Decision Tree Model",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/PredictionModelSettings"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "maxDepth" : {
+              "type" : "integer",
+              "description" : "The maximum depth of the tree",
+              "default" : 10
+            },
+            "minSampleSplit" : {
+              "type" : "integer",
+              "description" : "The minimum samples per split",
+              "default" : 2
+            },
+            "minSampleLeaf" : {
+              "type" : "integer",
+              "description" : "The minimum number of samples per leaf",
+              "default" : 10
+            },
+            "minImpurityDecrease" : {
+              "type" : "number",
+              "format" : "float",
+              "description" : "Threshold for early stopping in tree growth. A node will split if its impurity is above the threshold, otherwise it is a leaf. ",
+              "default" : 1.0E-7
+            },
+            "seed" : {
+              "type" : "number",
+              "format" : "float",
+              "description" : "An option to add a seed when training the final model",
+              "default" : null
+            },
+            "classWeight" : {
+              "type" : "string",
+              "description" : "Balance or None",
+              "default" : "None"
+            },
+            "plot" : {
+              "type" : "boolean",
+              "description" : "Boolean whether to plot the tree (requires python pydotplus module)",
+              "default" : false
+            }
+          }
+        } ]
+      },
+      "AdaBoostSettings" : {
+        "description" : "Specification for a Ada Boost Model",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/PredictionModelSettings"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "nEstimators" : {
+              "type" : "integer",
+              "description" : "The maximum number of estimators at which boosting is terminated",
+              "default" : 50
+            },
+            "learningRate" : {
+              "type" : "integer",
+              "description" : "Learning rate shrinks the contribution of each classifier by learningRate. There is a trade-off between learningRate and nEstimators .",
+              "default" : 1
+            },
+            "seed" : {
+              "type" : "number",
+              "format" : "float",
+              "description" : "A seed for the model",
+              "default" : null
+            }
+          }
+        } ]
+      },
+      "LassoLogisticRegressionSettings" : {
+        "description" : "Specification for a Lasso Logistic Regression Model",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/PredictionModelSettings"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "variance" : {
+              "type" : "number",
+              "format" : "float",
+              "description" : "A single value used as the starting value for the automatic lambda search",
+              "default" : 0.01
+            },
+            "seed" : {
+              "type" : "number",
+              "format" : "float",
+              "description" : "An option to add a seed when training the model",
+              "default" : null
+            }
+          }
+        } ]
+      },
+      "CovariateSettings" : {
+        "type" : "object",
+        "$ref": "FeatureExtraction.json#CovariateSettings"
+      },
+      "GetDbPLPDataArgs" : {
+        "description" : "Create a parameter object for the function getPlpData",
+        "properties" : {
+          "studyStartDate" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "A calendar date specifying the minimum date that a cohort index date can appear. Date format is 'yyyymmdd'.",
+            "default" : ""
+          },
+          "studyEndDate" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "A calendar date specifying the maximum date that a cohort index date can appear. Date format is 'yyyymmdd'. Important - the study end date is also used to truncate risk windows, meaning no outcomes beyond the study end date will be considered.",
+            "default" : ""
+          },
+          "excludeDrugsFromCovariates" : {
+            "type" : "boolean",
+            "description" : "A redundant option",
+            "default" : false
+          },
+          "firstExposureOnly" : {
+            "type" : "boolean",
+            "description" : "Should only the first exposure per subject be included? Note that this is typically done in the createStudyPopulation function, but can already be done here for efficiency reasons.",
+            "default" : false
+          },
+          "washoutPeriod" : {
+            "type" : "integer",
+            "description" : "The mininum required continuous observation time prior to index date for a person to be included in the cohort. Note that this is typically done in the createStudyPopulation function,but can already be done here for efficiency reasons.",
+            "default" : 0
+          },
+          "covariateSettings" : {
+            "$ref" : "#/components/schemas/CovariateSettings"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateStudyPopulationArgs" : {
+        "description" : "Create a parameter object for the function createStudyPopulation",
+        "properties" : {
+          "binary" : {
+            "type" : "boolean",
+            "description" : "Forces the outcomeCount to be 0 or 1 (use for binary prediction problems)",
+            "default" : true
+          },
+          "includeAllOutcomes" : {
+            "type" : "boolean",
+            "description" : "(binary) indicating whether to include people with outcomes who are not observed for the whole at risk period",
+            "default" : true
+          },
+          "firstExposureOnly" : {
+            "type" : "boolean",
+            "description" : "Should only the first exposure per subject be included? Note thatthis is typically done in the createStudyPopulation function",
+            "default" : false
+          },
+          "washoutPeriod" : {
+            "type" : "integer",
+            "description" : "The minimum required continuous observation time prior to index datefor a person to be included in the cohort.",
+            "default" : 0
+          },
+          "removeSubjectsWithPriorOutcome" : {
+            "type" : "boolean",
+            "description" : "Remove subjects that have the outcome prior to the risk windowstart?",
+            "default" : false
+          },
+          "priorOutcomeLookback" : {
+            "type" : "integer",
+            "description" : "How many days should we look back when identifying prior outcomes?",
+            "default" : 99999
+          },
+          "requireTimeAtRisk" : {
+            "type" : "boolean",
+            "description" : "Should subjects without time at risk be removed?",
+            "default" : true
+          },
+          "minTimeAtRisk" : {
+            "type" : "integer",
+            "description" : "The miminum time at risk in days",
+            "default" : 365
+          },
+          "riskWindowStart" : {
+            "type" : "integer",
+            "description" : "The start of the risk window (in days) relative to the indexdate (+days of exposure if theaddExposureDaysToStart parameter isspecified).",
+            "default" : 0
+          },
+          "addExposureDaysToStart" : {
+            "type" : "boolean",
+            "description" : "Add the length of exposure the start of the risk window?",
+            "default" : false
+          },
+          "riskWindowEnd" : {
+            "type" : "integer",
+            "description" : "The end of the risk window (in days) relative to the index date (+days of exposure if the addExposureDaysToEnd parameter isspecified).",
+            "default" : 365
+          },
+          "addExposureDaysToEnd" : {
+            "type" : "boolean",
+            "description" : "Add the length of exposure the risk window?",
+            "default" : true
+          }
+        },
+        "type" : "object"
+      },
+      "RunPLPArgs" : {
+        "description" : "Create a parameter object",
+        "properties" : {
+          "minCovariateFraction" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "The minimum fraction of target population who must have a covariate for it to be included in the model training",
+            "default" : 0.001
+          },
+          "normalizeData" : {
+            "type" : "boolean",
+            "description" : "Whether to normalise the covariates before training",
+            "default" : true
+          },
+          "modelSettings" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/NaiveBayesModelSettings"
+              }, {
+                "$ref" : "#/components/schemas/RandomForestSettings"
+              }, {
+                "$ref" : "#/components/schemas/MultilayerPerceptionModelSettings"
+              }, {
+                "$ref" : "#/components/schemas/KNearestNeighborsSettings"
+              }, {
+                "$ref" : "#/components/schemas/GradientBoostingMachineSettings"
+              }, {
+                "$ref" : "#/components/schemas/DecisionTreeSettings"
+              }, {
+                "$ref" : "#/components/schemas/AdaBoostSettings"
+              }, {
+                "$ref" : "#/components/schemas/LassoLogisticRegressionSettings"
+              } ]
+            }
+          },
+          "testSplit" : {
+            "type" : "string",
+            "description" : "Either 'person' or 'time' specifying the type of evaluation used. 'time' find the date where testFraction of patients had an index after the date and assigns patients with an index prior to this date into the training set and post the date into the test set 'person' splits the data into test (1-testFraction of the data) and train (validationFraction of the data) sets.  The split is stratified by the class label.",
+            "default" : "time",
+            "enum" : [ "time", "person" ]
+          },
+          "testFraction" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "The fraction of the data to be used as the test set in the patient split evaluation",
+            "default" : 0.25
+          },
+          "splitSeed" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "The seed used to split the test/train set when using a person type testSplit",
+            "default" : null
+          },
+          "nfold" : {
+            "type" : "integer",
+            "description" : "The number of folds used in the cross validation",
+            "default" : 3
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
+            "description" : "A dataframe containing a rowId and index column where the index value of -1 means in the test set, and positive integer represents the cross validation fold (default is NULL)",
+            "default" : null
+          },
+          "savePlpData" : {
+            "type" : "boolean",
+            "description" : "Save the PLP Data",
+            "default" : true
+          },
+          "savePlpResults" : {
+            "type" : "boolean",
+            "description" : "Save the PLP Results from running the model",
+            "default" : true
+          },
+          "savePlpPlots" : {
+            "type" : "boolean",
+            "description" : "Save the plots generated by the PLP package to the file system",
+            "default" : true
+          },
+          "saveEvaluation" : {
+            "type" : "boolean",
+            "description" : "Save the evaluation information",
+            "default" : true
+          }
+        },
+        "type" : "object"
+      },
+      "TargetOutcomes" : {
+        "description" : "Defines a target cohort ID and a list of outcome cohort IDs of interest",
+        "required" : [ "targetId", "outcomeIds" ],
+        "properties" : {
+          "targetId" : {
+            "type" : "string",
+            "description" : "Target cohort id",
+            "format" : "int32"
+          },
+          "outcomeIds" : {
+            "description" : "The list of outcome cohort ids",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "int32"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CohortDefinition" : {
+        "type" : "object",
+        "$ref" : "CohortDefinition.json#CohortDefinition"
+      },
+      "ConceptSet" : {
+        "type" : "object",
+        "$ref" : "ConceptSet.json#ConceptSet"
+      }
+    }
+  }
+}

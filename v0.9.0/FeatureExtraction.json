@@ -1,13 +1,13 @@
 {
   "openapi" : "3.0.0",
   "servers" : [ {
-    "description" : "Covariate Settings for FeatureExtraction",
+    "description" : "Feature Extraction",
     "url" : "https://github.com/OHDSI/Specifications/v0.9.0/CovariateSettings"
   } ],
   "info" : {
-    "description" : "Covariate Settings based on OHDSI Feature Extraction definition (https://github.com/OHDSI/FeatureExtraction/blob/master/R/DefaultCovariateSettings.R)",
+    "description" : "Based on OHDSI Feature Extraction (https://github.com/OHDSI/FeatureExtraction)",
     "version" : "0.9.0",
-    "title" : "Covariate Settings",
+    "title" : "Feature Extraction",
     "license" : {
       "name" : "Apache 2.0",
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
