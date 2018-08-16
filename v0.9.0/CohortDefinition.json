@@ -282,11 +282,11 @@
       },
       "ConceptSet" : {
         "type" : "object",
-        "$ref" : "ConceptSet.json#ConceptSet"
+        "$ref" : "ConceptSet.json#/components/schemas/ConceptSet"
       },
       "Concept" : {
         "type" : "object",
-        "$ref" : "ConceptSet.json#Concept"
+        "$ref" : "ConceptSet.json#/components/schemas/Concept"
       },
       "EndStrategy" : {
         "type" : "object",

@@ -370,7 +370,7 @@
       },
       "CovariateSettings" : {
         "type" : "object",
-        "$ref": "FeatureExtraction.json#CovariateSettings"
+        "$ref": "FeatureExtraction.json#/components/schemas/CovariateSettings"
       },
       "GetDbPLPDataArgs" : {
         "description" : "Create a parameter object for the function getPlpData",
@@ -586,11 +586,11 @@
       },
       "CohortDefinition" : {
         "type" : "object",
-        "$ref" : "CohortDefinition.json#CohortDefinition"
+        "$ref" : "CohortDefinition.json#/components/schemas/CohortDefinition"
       },
       "ConceptSet" : {
         "type" : "object",
-        "$ref" : "ConceptSet.json#ConceptSet"
+        "$ref" : "ConceptSet.json#/components/schemas/ConceptSet"
       }
     }
   }

@@ -1,0 +1,1860 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "Population Level Estimation Study Specification",
+    "url" : "https://github.com/OHDSI/Specifications/v0.9.0/Estimation"
+  } ],
+  "info" : {
+    "description" : "Population Level Effect Estimation",
+    "version" : "0.9.0",
+    "title" : "Population Level Estimation",
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "paths" : {
+    "/" : {
+      "get" : {
+        "summary" : "Get a list of estimation studies",
+        "operationId" : "getEstimations",
+        "description" : "This is a placeholder method",
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/EstimationAnalysis"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "EstimationAnalysis" : {
+        "description" : "Fully describes all dependencies required to execute an estimation analysis",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Identifier for the estimation specification"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Name for the estimation specification"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "Version number of the specification for use by the hydration package"
+          },
+          "createdBy" : {
+            "type" : "string",
+            "description" : "The person who created the specification"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "description" : "The date and time the estimation was first saved"
+          },
+          "modifiedBy" : {
+            "type" : "string",
+            "description" : "The person who updated the specification"
+          },
+          "modifiedDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "description" : "The date and time the estimation was last saved"
+          },
+          "cohortDefinitions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CohortDefinition"
+            }
+          },
+          "conceptSets" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ConceptSet"
+            }
+          },
+          "injectSignalsArgs" : {
+            "$ref" : "#/components/schemas/InjectSignalsArgs"
+          },
+          "negativeControls" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NegativeControl"
+            }
+          },
+          "estimationAnalysisSettings" : {
+            "$ref" : "#/components/schemas/EstimationAnalysisSettings"
+          },
+          "empiricalCalibrationSettings" : {
+            "$ref" : "#/components/schemas/EmpiricalCalibrationSettings"
+          },
+          "estimationOutputSetttings" : {
+            "$ref" : "#/components/schemas/EstimationOutputSettings"
+          }
+        },
+        "type" : "object"
+      },
+      "EstimationAnalysisSettings" : {
+        "description" : "Holds the settings for an estimation analysis",
+        "properties" : {
+          "estimationType" : {
+            "type" : "string",
+            "description" : "The type of estimation analysis to execute"
+          },
+          "analysisSpecification" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/ComparativeCohortAnalysis"
+            }, {
+              "$ref" : "#/components/schemas/SelfControlledCohortAnalysis"
+            }, {
+              "$ref" : "#/components/schemas/SelfControlledCaseSeriesAnalysis"
+            }, {
+              "$ref" : "#/components/schemas/CaseControlAnalysis"
+            }, {
+              "$ref" : "#/components/schemas/CaseCrossoverAnalysis"
+            } ]
+          }
+        },
+        "type" : "object"
+      },
+      "Analysis" : {
+        "description" : "Base class for an analysis",
+        "properties" : {
+          "analysisId" : {
+            "type" : "integer",
+            "description" : "Unique identifier for the analysis"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Description of the analysis"
+          }
+        }
+      },
+      "ComparativeCohortAnalysis" : {
+        "description" : "Holds the input parameters required to run a comparative cohort analysis using CohortMethod v3.0.0",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Analysis"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "targetComparatorOutcomes" : {
+              "type" : "array",
+              "description" : "The list of targetComparatorOutcomes",
+              "items" : {
+                "$ref" : "#/components/schemas/TargetComparatorOutcomes"
+              }
+            },
+            "cohortMethodAnalysisList" : {
+              "type" : "array",
+              "description" : "The list of comparative cohort analyses for CohortMethod",
+              "items" : {
+                "$ref" : "#/components/schemas/CohortMethodAnalysis"
+              }
+            }
+          }
+        } ]
+      },
+      "SelfControlledCohortAnalysis" : {
+        "description" : "Holds the input parameters required to run a self-controlled cohort analysis using SelfControlledCohort v1.4.1",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Analysis"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "targetOutcomePairList" : {
+              "type" : "array",
+              "description" : "The list of target and outcomes to test",
+              "items" : {
+                "$ref" : "#/components/schemas/TargetOutcome"
+              }
+            },
+            "analysisList" : {
+              "$ref" : "#/components/schemas/SelfControlledCohortAnalysisSettings"
+            }
+          }
+        } ]
+      },
+      "SelfControlledCohortAnalysisSettings" : {
+        "description" : "Conforms to object created by the createSccAnalysis function of SelfControlledCohort",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Analysis"
+        }, {
+          "type" : "object",
+          "required" : [ "analysisId" ],
+          "properties" : {
+            "exposureType" : {
+              "type" : "integer",
+              "description" : "If more than one exposure is provided for each exposureOutcome, this field should be used to select the specific exposure to use in this analysis."
+            },
+            "outcomeType" : {
+              "type" : "integer",
+              "description" : "If more than one outcome is provided for each exposureOutcome, this field should be used to select the specific outcome to use in this analysis."
+            },
+            "runSelfControlledCohortArgs" : {
+              "$ref" : "#/components/schemas/RunSelfControlledCohortArgs"
+            }
+          }
+        } ]
+      },
+      "RunSelfControlledCohortArgs" : {
+        "description" : "An object representing the argument to be used when calling the runSelfControlledCohort function",
+        "properties" : {
+          "firstExposureOnly" : {
+            "type" : "boolean",
+            "description" : "If TRUE, only use first occurrence of each drug concept idfor each person",
+            "default" : true
+          },
+          "firstOutcomeOnly" : {
+            "type" : "boolean",
+            "description" : "If TRUE, only use first occurrence of each condition conceptid for each person.",
+            "default" : true
+          },
+          "minAge" : {
+            "type" : "integer",
+            "description" : "Integer for minimum allowable age.",
+            "default" : null
+          },
+          "maxAge" : {
+            "type" : "integer",
+            "description" : "Integer for maximum allowable age.",
+            "default" : null
+          },
+          "studyStartDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "default" : null,
+            "description" : "Date for minimum allowable data for index exposure. Dateformat is 'yyyymmdd'."
+          },
+          "studyEndDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "default" : null,
+            "description" : "Date for maximum allowable data for index exposure. Dateformat is 'yyyymmdd'."
+          },
+          "addLengthOfExposureExposed" : {
+            "type" : "boolean",
+            "description" : "If TRUE, use the duration from drugEraStart -> drugEraEnd as part of timeAtRisk.",
+            "default" : true
+          },
+          "riskWindowStartExposed" : {
+            "type" : "integer",
+            "description" : "Integer of days to add to drugEraStart for start oftimeAtRisk (0 to include index date, 1 to start the day after).",
+            "default" : 1
+          },
+          "riskWindowEndExposed" : {
+            "type" : "integer",
+            "description" : "Additional window to add to end of exposure period (if addLengthOfExposureExposed = TRUE, then add to exposure enddate, else add to exposure start date).",
+            "default" : 30
+          },
+          "addLengthOfExposureUnexposed" : {
+            "type" : "boolean",
+            "description" : "If TRUE, use the duration from exposure start -> exposureend as part of timeAtRisk looking back before exposurestart.",
+            "default" : true
+          },
+          "riskWindowEndUnexposed" : {
+            "type" : "integer",
+            "description" : "Integer of days to add to exposure start for end of timeAtRisk (0 to include index date, -1 to end the day before).",
+            "default" : -1
+          },
+          "riskWindowStartUnexposed" : {
+            "type" : "integer",
+            "description" : "Additional window to add to start of exposure period (if addLengthOfExposureUnexposed = TRUE, then add to exposureend date, else add to exposure start date).",
+            "default" : -30
+          },
+          "hasFullTimeAtRisk" : {
+            "type" : "boolean",
+            "description" : "If TRUE, restrict to people who have full time-at-risk exposed and unexposed.",
+            "default" : false
+          },
+          "washoutPeriod" : {
+            "type" : "integer",
+            "description" : "Integer to define required time observed before exposure start.",
+            "default" : 0
+          },
+          "followupPeriod" : {
+            "type" : "integer",
+            "description" : "Integer to define required time observed after exposure start.                  "
+          }
+        },
+        "type" : "object"
+      },
+      "SelfControlledCaseSeriesAnalysis" : {
+        "description" : "Holds the input parameters required to run a self-controlled case series analysis using SelfControlledCaseSeries v1.3.0",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Analysis"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "targetOutcomePairList" : {
+              "type" : "array",
+              "description" : "The list of target and outcomes to test",
+              "items" : {
+                "$ref" : "#/components/schemas/TargetOutcome"
+              }
+            },
+            "analysisList" : {
+              "$ref" : "#/components/schemas/SelfControlledCaseSeriesAnalysisSettings"
+            }
+          }
+        } ]
+      },
+      "SelfControlledCaseSeriesAnalysisSettings" : {
+        "description" : "Conforms to object created by the createSccsAnalysis function of SelfControlledCaseSeries",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Analysis"
+        }, {
+          "type" : "object",
+          "required" : [ "analysisId" ],
+          "properties" : {
+            "exposureType" : {
+              "type" : "integer",
+              "description" : "If more than one exposure is provided for each exposureOutcome, this field should be used to select the specific exposure to use in this analysis."
+            },
+            "outcomeType" : {
+              "type" : "integer",
+              "description" : "If more than one outcome is provided for each exposureOutcome, this field should be used to select the specific outcome to use in this analysis."
+            },
+            "getDbSccsDataArgs" : {
+              "$ref" : "#/components/schemas/GetDbSccsDataArgs"
+            },
+            "createSccsEraDataArgs" : {
+              "$ref" : "#/components/schemas/SccsEraDataArgs"
+            },
+            "fitSccsModelArgs" : {
+              "$ref" : "#/components/schemas/FitSccsModelArgs"
+            }
+          }
+        } ]
+      },
+      "CaseControlAnalysis" : {
+        "description" : "Holds the input parameters required to run a case control analysis using CaseControl v1.4.0.This object represents the arguments to be used when calling the runCcAnalyses function.",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Analysis"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "exposureType" : {
+              "type" : "integer",
+              "description" : "If more than one exposure is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific exposure to use in this analysis."
+            },
+            "outcomeType" : {
+              "type" : "integer",
+              "description" : "If more than one outcome is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific outcome to use in this analysis."
+            },
+            "nestingCohortType" : {
+              "type" : "integer",
+              "description" : "If more than one nesting cohort is provided for each exposureOutcomeNesting-Cohort, this field should be used to select the specific nesting cohort to use in this analysis."
+            },
+            "getDbCaseDataArgs" : {
+              "$ref" : "#/components/schemas/GetDbCaseDataArgs"
+            },
+            "selectControlsArgs" : {
+              "$ref" : "#/components/schemas/SelectControlsArgs"
+            },
+            "getDbExposureDataArgs" : {
+              "$ref" : "#/components/schemas/GetDbExposureDataArgs"
+            },
+            "createCaseControlDataArgs" : {
+              "$ref" : "#/components/schemas/CaseControlDataArgs"
+            },
+            "fitCaseControlModelArgs" : {
+              "$ref" : "#/components/schemas/FitCaseControlModelArgs"
+            }
+          }
+        } ]
+      },
+      "GetDbCaseDataArgs" : {
+        "description" : "An object representing the arguments to be used when calling the createGetDbCaseDataArgs function.",
+        "properties" : {
+          "useNestingCohort" : {
+            "type" : "boolean",
+            "description" : "Should the study be nested in a cohort (e.g. people witha specific indication)? If not, the study will be nestedin the general population. ",
+            "default" : false
+          },
+          "useObservationEndAsNestingEndDate" : {
+            "type" : "boolean",
+            "description" : "When using a nesting cohort, should the observation period end date be used instead of the cohort end date?",
+            "default" : true
+          },
+          "getVisits" : {
+            "type" : "boolean",
+            "description" : "Get data on visits? This is needed when matching on visit date is requested later on.",
+            "default" : true
+          },
+          "studyStartDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "default" : null,
+            "description" : "A calendar date specifying the minimum date where data is used. Date format is ’yyyymmdd’."
+          },
+          "studyEndDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "description" : "A calendar date specifying the maximum date where data is used. Date format is ’yyyymmdd’.      "
+          }
+        },
+        "type" : "object"
+      },
+      "SelectControlsArgs" : {
+        "description" : "An object representing the arguments to be used when calling the selectControls function.",
+        "properties" : {
+          "firstOutcomeOnly" : {
+            "type" : "boolean",
+            "description" : "Use the first outcome per person?",
+            "default" : true
+          },
+          "washoutPeriod" : {
+            "type" : "integer",
+            "description" : "Minimum required numbers of days of observation for inclusion as either case or control.",
+            "default" : 180
+          },
+          "controlsPerCase" : {
+            "type" : "integer",
+            "description" : "Maximum number of controls to select per case.",
+            "default" : 2
+          },
+          "matchOnAge" : {
+            "type" : "boolean",
+            "description" : "Match on age?",
+            "default" : true
+          },
+          "ageCaliper" : {
+            "type" : "boolean",
+            "description" : "Maximum difference (in years) in age when matching on age.",
+            "default" : 2
+          },
+          "matchOnGender" : {
+            "type" : "boolean",
+            "description" : "Match on gender?",
+            "default" : true
+          },
+          "matchOnProvider" : {
+            "type" : "boolean",
+            "description" : "Match on provider (as specified in the person table)?",
+            "default" : false
+          },
+          "matchOnCareSite" : {
+            "type" : "boolean",
+            "description" : "Match on care site (as specified in the person table)?",
+            "default" : false
+          },
+          "matchOnVisitDate" : {
+            "type" : "boolean",
+            "description" : "Should the index date of the control be changed to the nearest visitdate?",
+            "default" : false
+          },
+          "visitDateCaliper" : {
+            "type" : "integer",
+            "description" : "Maximum difference (in days) between the index date and the visitdate when matching on visit date.",
+            "default" : 30
+          },
+          "matchOnTimeInCohort" : {
+            "type" : "boolean",
+            "description" : "Match on time in nesting cohort? When not using nesting, this isinterpreted as time observed prior to index.",
+            "default" : false
+          },
+          "daysInCohortCaliper" : {
+            "type" : "integer",
+            "description" : "Maximum difference (in days) in time in cohort.",
+            "default" : 30
+          },
+          "minAge" : {
+            "type" : "integer",
+            "description" : "Minimum age at which patient time will be included in the analysis.Note that information prior to the min age is still used to determineexposure status after the minimum age (e.g. when a prescription wasstarted just prior to reaching the minimum age). Also, outcomesoccurring before the minimum age is reached will be considered asprior outcomes when using first outcomes only. Age should be specifiedin years, but non-integer values are allowed. If not specified, no agerestriction will be applied.",
+            "default" : null
+          },
+          "maxAge" : {
+            "type" : "integer",
+            "description" : "Maximum age at which patient time will be included in the analysis. Ageshould be specified in years, but non-integer values are allowed. If notspecified, no age restriction will be applied.",
+            "default" : null
+          },
+          "removedUnmatchedCases" : {
+            "type" : "boolean",
+            "description" : "Should cases with no matched controls be removed?",
+            "default" : true
+          }
+        },
+        "type" : "object"
+      },
+      "GetDbExposureDataArgs" : {
+        "description" : "Create a parameter object for the function getDbExposureData",
+        "properties" : {
+          "covariateSettings" : {
+            "$ref" : "#/components/schemas/CovariateSettings"
+          }
+        },
+        "type" : "object"
+      },
+      "CaseControlDataArgs" : {
+        "description" : "Create a parameter object for the function createCaseControlData",
+        "properties" : {
+          "firstExposureOnly" : {
+            "type" : "boolean",
+            "description" : "Should only the first exposure per subject be included?",
+            "default" : false
+          },
+          "riskWindowStart" : {
+            "type" : "integer",
+            "description" : "The start of the risk window (in days) relative to the index date. This number should be non-positive.",
+            "default" : 0
+          },
+          "riskWindowEnd" : {
+            "type" : "integer",
+            "description" : "The end of the risk window (in days) relative to the index date. This number should be non-positive.",
+            "default" : 0
+          }
+        },
+        "type" : "object"
+      },
+      "FitCaseControlModelArgs" : {
+        "description" : "Create a parameter object for the function fitCaseControlModel",
+        "properties" : {
+          "useCovariates" : {
+            "type" : "boolean",
+            "description" : "Whether to use the covariates in the caseControlsExposure.",
+            "default" : false
+          },
+          "excludeCovariateIds" : {
+            "type" : "array",
+            "default" : [ ],
+            "description" : "Exclude these covariates from the model.",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "includeCovariateIds" : {
+            "type" : "array",
+            "default" : [ ],
+            "description" : "Include only these covariates in the model.",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "prior" : {
+            "$ref" : "#/components/schemas/Prior"
+          },
+          "control" : {
+            "$ref" : "#/components/schemas/Control"
+          }
+        },
+        "type" : "object"
+      },
+      "CaseCrossoverAnalysis" : {
+        "description" : "Holds the input parameters required to run a case crossover analysis using CaseCrossover v1.0.1.This object represents the arguments to be used when calling the runCcrAnalyses function.",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Analysis"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "exposureType" : {
+              "type" : "integer",
+              "description" : "If more than one exposure is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific exposure to use in this analysis."
+            },
+            "outcomeType" : {
+              "type" : "integer",
+              "description" : "If more than one outcome is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific outcome to use in this analysis."
+            },
+            "nestingCohortType" : {
+              "type" : "integer",
+              "description" : "If more than one nesting cohort is provided for each exposureOutcomeNesting-Cohort, this field should be used to select the specific nesting cohort to use in this analysis."
+            },
+            "getDbCaseCrossoverDataArgs" : {
+              "$ref" : "#/components/schemas/DbCaseCrossoverData"
+            },
+            "selectSubjectsToIncludeArgs" : {
+              "$ref" : "#/components/schemas/SelectSubjectsToIncludeArgs"
+            },
+            "getExposureStatusArgs" : {
+              "$ref" : "#/components/schemas/GetExposureStatusArgs"
+            }
+          }
+        } ]
+      },
+      "DbCaseCrossoverData" : {
+        "description" : "Create a parameter object for the function getDbCaseCrossoverData",
+        "properties" : {
+          "useNestingCohort" : {
+            "type" : "boolean",
+            "description" : "Should the study be nested in a cohort (e.g. people with a specific indication)? If not, the study will be nested in the general population.",
+            "default" : false
+          },
+          "useObservationEndAsNestingEndDate" : {
+            "type" : "boolean",
+            "description" : "When using a nesting cohort, should the observation period end date be used instead of the cohort end date?",
+            "default" : true
+          },
+          "getVisits" : {
+            "type" : "boolean",
+            "description" : "Get data on visits? This is needed when performing a time-case-control study and matching on visit date is requested later on.",
+            "default" : false
+          },
+          "studyStartDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "description" : "A calendar date specifying the minimum date where data is used. Date format is ’yyyymmdd’.",
+            "default" : ""
+          },
+          "studyEndDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "description" : "A calendar date specifying the maximum date where data is used. Date format is ’yyyymmdd’.",
+            "default" : ""
+          },
+          "getTimeControlData" : {
+            "type" : "boolean",
+            "description" : "Should data for time controls be fetched? (needed for case-time-control analyses).",
+            "default" : false
+          }
+        },
+        "type" : "object"
+      },
+      "SelectSubjectsToIncludeArgs" : {
+        "description" : "Create a parameter object for the function selectSubjectsToInclude",
+        "properties" : {
+          "firstOutcomeOnly" : {
+            "type" : "boolean",
+            "description" : "Use the first outcome per person?",
+            "default" : true
+          },
+          "washoutPeriod" : {
+            "type" : "integer",
+            "description" : "Minimum required numbers of days of observation for inclusion as either case or control.",
+            "default" : 180
+          },
+          "matchingCriteria" : {
+            "type" : "integer",
+            "description" : "If provided, a case-time-control analysis will be performed and controls will be matched based on these criteria.",
+            "default" : null
+          },
+          "minAge" : {
+            "type" : "integer",
+            "description" : "Minimum age at which patient time will be included in the analysis. Note that information prior to the min age is still used to determine exposure status after the minimum age (e.g. when a prescription was started just prior to reaching the minimum age). Also, outcomes occurring before the minimum age is reached will be considered as prior outcomes when using first outcomes only. Age should be specified in years, but non-integer values are allowed. If not specified, no age restriction will be applied.",
+            "default" : null
+          },
+          "maxAge" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "Maximum age at which patient time will be included in the analysis. Age should be specified in years, but non-integer values are allowed. If not specified, no age restriction will be applied."
+          }
+        },
+        "type" : "object"
+      },
+      "GetExposureStatusArgs" : {
+        "description" : "Create a parameter object for the function getExposureStatus",
+        "properties" : {
+          "firstExposureOnly" : {
+            "type" : "boolean",
+            "description" : "Should only the first exposure per subject be included?",
+            "default" : false
+          },
+          "riskWindowStart" : {
+            "type" : "integer",
+            "description" : "The start of the risk window (in days) relative to the index date. This number should be non-positive.",
+            "default" : -30
+          },
+          "riskWindowEnd" : {
+            "type" : "integer",
+            "description" : "The end of the risk window (in days) relative to the index date. This number should be non-positive.",
+            "default" : 0
+          },
+          "controlWindowOffsets" : {
+            "type" : "array",
+            "description" : "Offsets in days of the control windows relative to the case window.",
+            "items" : {
+              "type" : "integer"
+            },
+            "default" : [ -60 ]
+          }
+        },
+        "type" : "object"
+      },
+      "GetDbSccsDataArgs" : {
+        "description" : "Create a parameter object for the function getDbSccsData",
+        "properties" : {
+          "useCustomCovariates" : {
+            "type" : "boolean",
+            "description" : "Create covariates from a custom table?",
+            "default" : false
+          },
+          "deleteCovariatesSmallCount" : {
+            "type" : "integer",
+            "description" : "The minimum count for a covariate to appear in the data to be kept.",
+            "default" : 100
+          },
+          "studyStartDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "default" : null,
+            "description" : "A calendar date specifying the minimum date where data isused. Date format is 'yyyymmdd'."
+          },
+          "studyEndDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "default" : null,
+            "description" : "A calendar date specifying the maximu date where data isused. Date format is 'yyyymmdd'."
+          },
+          "exposureIds" : {
+            "type" : "array",
+            "description" : "A list of identifiers to define the exposures of interest. If exposureTable = DRUG_ERA, exposureIds should be CONCEPT_ID. If exposureTable <> DRUG_ERA, exposureIds is used to select the cohort_concept_id in the cohort-like table. If no exposureIds are provided, all drugs or cohorts in the exposureTable are included as exposures.",
+            "default" : [ "exposureId" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "customCovariateIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
+            "default" : [ ],
+            "description" : "A list of cohort definition IDS identifying the records in the customCovariateTable to use for building customcovariates.                      "
+          }
+        },
+        "type" : "object"
+      },
+      "SccsEraDataArgs" : {
+        "description" : "Create SCCS era data. This function creates covariates based on the data in the sccsData object, according to the provided settings. It chops patient time into periods during which all covariates remain constant. The output details these periods, their durations, and a sparse representation of the covariate values.",
+        "properties" : {
+          "outcomeId" : {
+            "type" : "integer",
+            "description" : "The outcome to create the era data for. If not specified it is assumed to be the one outcome for which the data was loaded from the database."
+          },
+          "naivePeriod" : {
+            "type" : "integer",
+            "description" : "The number of days at the start of a patient's observation period that should not be included in the risk calculations. Note that the naive period can be used to determine current covariate status right after the naive period, and whether an outcome is the first one.",
+            "default" : 0
+          },
+          "firstOutcomeOnly" : {
+            "type" : "boolean",
+            "description" : "Whether only the first occurrence of an outcome should be considered.",
+            "default" : false
+          },
+          "covariateSettings" : {
+            "$ref" : "#/components/schemas/SccsCovariateSettings"
+          },
+          "ageSettings" : {
+            "$ref" : "#/components/schemas/AgeSettings"
+          },
+          "seasonalitySettings" : {
+            "$ref" : "#/components/schemas/SeasonalitySettings"
+          },
+          "minCasesForAgeSeason" : {
+            "type" : "integer",
+            "description" : "Minimum number of cases to use to fit age and season splines. IF needed (and available), cases that are not exposed will be included.#'",
+            "default" : 10000
+          },
+          "eventDependentObservation" : {
+            "type" : "boolean",
+            "description" : "Should the extension proposed by Farrington et al. be used to adjust for event-dependent observation time?",
+            "default" : 1
+          }
+        },
+        "type" : "object"
+      },
+      "SccsCovariateSettings" : {
+        "description" : "Create the covariate settings for use in the SCCS analysis",
+        "properties" : {
+          "includeCovariateIds" : {
+            "type" : "integer",
+            "description" : "One or more IDs of variables in the sccsData object that should be used to construct this covariate. If no IDs are specified, all variables will be used."
+          },
+          "excludeCovariateIds" : {
+            "type" : "integer",
+            "description" : "One or more IDs of variables in the sccsData object that should not be used to construct this covariate."
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "A label used to identify the covariates created using these settings.",
+            "default" : "Covariates"
+          },
+          "stratifyById" : {
+            "type" : "boolean",
+            "description" : "Should a single covariate be created for every ID in the sccsData object, or should a single covariate be constructed? For example, if the IDs identify exposures to different drugs, should a covariate be constructed for every drug, or a single covariate for exposure to any of these drugs. Note that overlap will be considered a single exposure."
+          },
+          "start" : {
+            "type" : "integer",
+            "description" : "The start of the risk window in days, relative to the exposure start date.",
+            "default" : 0
+          },
+          "addExposedDaysToStart" : {
+            "type" : "boolean",
+            "description" : "Should the length of exposure be added to the start date?",
+            "default" : false
+          },
+          "end" : {
+            "type" : "integer",
+            "description" : "The start of the risk window in days, relative to the exposure start date.",
+            "default" : 0
+          },
+          "addExposedDaysToEnd" : {
+            "type" : "boolean",
+            "description" : "Should the length of exposure be added to the end date?",
+            "default" : false
+          },
+          "firstOccurrenceOnly" : {
+            "type" : "boolean",
+            "description" : "Should only the first occurrence of the exposure be used?",
+            "default" : false
+          },
+          "splitPoints" : {
+            "type" : "array",
+            "description" : "To split the risk window into several smaller windows, specify the end of each sub- window relative to the start of the main risk window. If addExposedDaysToStart is TRUE, the split points will be considered to be relative to the end of the main risk window instead.",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "allowRegularization" : {
+            "type" : "boolean",
+            "description" : "When fitting the model, should the covariates defined here be allowed to be regularized?",
+            "default" : false
+          }
+        },
+        "type" : "object"
+      },
+      "AgeSettings" : {
+        "description" : "Create age settings for the sccs analysis",
+        "properties" : {
+          "includeAge" : {
+            "type" : "boolean",
+            "description" : "Should age be included in the model?"
+          },
+          "ageKnots" : {
+            "type" : "integer",
+            "description" : "If a single number is provided this is assumed to indicate the number of knots to use for the spline, and the knots are automatically spaced according to equal percentiles of the data. If more than one number is provided these are assumed to be the exact location of the knots in age-days",
+            "default" : 5
+          },
+          "allowRegularization" : {
+            "type" : "boolean",
+            "description" : "When fitting the model, should the covariates defined here be allowed to be regularized?",
+            "default" : false
+          },
+          "computeConfidenceIntervals" : {
+            "type" : "boolean",
+            "description" : "Should confidence intervals be computed for the covariates defined here? Setting this to FALSE might save computing time when fitting the model. Will be turned to FALSE automaticaly when allowRegularization = TRUE.",
+            "default" : false
+          },
+          "minAge" : {
+            "type" : "integer",
+            "description" : "Minimum age at which patient time will be included in the analysis. Note that information prior to the min age is still used to determine exposure status after the minimum age (e.g. when a prescription was started just prior to reaching the minimum age). Also, outcomes occurring before the minimum age is reached will be considered as prior outcomes when using first outcomes only. Age should be specified in years, but non-integer values are allowed. If not specified, no age restriction will be applied."
+          },
+          "maxAge" : {
+            "type" : "integer",
+            "description" : "Maximum age at which patient time will be included in the analysis. Age should be specified in years, but non-integer values are allowed. If not specified, no age restriction will be applied.  "
+          }
+        },
+        "type" : "object"
+      },
+      "SeasonalitySettings" : {
+        "description" : "Create seasonality settings for use with an sccs analysis",
+        "properties" : {
+          "includeSeasonality" : {
+            "type" : "boolean",
+            "description" : "Should seasonlaity be included in the model?",
+            "default" : false
+          },
+          "seasonKnots" : {
+            "type" : "integer",
+            "description" : "If a single number is provided this is assumed to indicate the number of knots to use for the spline, and the knots are automatically equaly spaced across the year. If more than one number is provided these are assumed to be the exact location of the knots in days relative to the start of the year.",
+            "default" : 5
+          },
+          "allowRegularization" : {
+            "type" : "boolean",
+            "description" : "When fitting the model, should the covariates defined here be allowed to be regularized?",
+            "default" : false
+          },
+          "computeConfidenceIntervals" : {
+            "type" : "boolean",
+            "description" : "Should confidence intervals be computed for the covariates defined here? Setting this to FALSE might save computing time when fitting the model. Will be turned to FALSE automaticaly when allowRegularization = TRUE.      ",
+            "default" : false
+          }
+        },
+        "type" : "object"
+      },
+      "FitSccsModelArgs" : {
+        "description" : "Create a parameter object for the function fitSccsModel",
+        "properties" : {
+          "prior" : {
+            "$ref" : "#/components/schemas/Prior"
+          },
+          "control" : {
+            "descripton" : "The control object used to control the cross-validation used to determine the hyperparameters of the prior (if applicable).",
+            "$ref" : "#/components/schemas/Control"
+          }
+        },
+        "type" : "object"
+      },
+      "EmpiricalCalibrationSettings" : {
+        "description" : "The settings used for performing empirical calibration",
+        "properties" : {
+          "analysisIds" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Analysis"
+            }
+          },
+          "negativeControlSets" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TargetComparatorOutcomes"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "EstimationOutputSettings" : {
+        "description" : "Speciifes the diagnostic information to produce from the estimation analysis",
+        "properties" : {
+          "analysisIds" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Analysis"
+            }
+          },
+          "produceDiagnostics" : {
+            "type" : "boolean",
+            "description" : "Flag to generate diagnostics from the CohortMethod package.",
+            "default" : true
+          },
+          "blinded" : {
+            "type" : "boolean",
+            "description" : "Flag to hide study results from view. Default to TRUE to enable review of diagnostics prior to reviewing results. ",
+            "default" : true
+          }
+        },
+        "type" : "object"
+      },
+      "TargetComparatorOutcomes" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/TargetOutcome"
+        }, {
+          "type" : "object",
+          "description" : "Conforms to object created by the createTargetComparatorOutcomes function of CohortMethod ",
+          "required" : [ "targetId", "comparatorId", "outcomeIds" ],
+          "properties" : {
+            "comparatorId" : {
+              "type" : "string",
+              "description" : "Comparator cohort id",
+              "format" : "int32"
+            },
+            "excludedCovariateConceptIds" : {
+              "description" : "A list of concept IDs that cannot be used to construct covariates. This argument is to be used only for exclusionconcepts that are specific to the drug-comparator combination.",
+              "type" : "array",
+              "default" : [ ],
+              "items" : {
+                "type" : "string",
+                "format" : "int32"
+              }
+            },
+            "includedCovariateConceptIds" : {
+              "description" : "A list of concept IDs that must be used to construct covariates. This argument is to be used only for inclusion concepts that are specific to the drug-comparator combination.",
+              "type" : "array",
+              "default" : [ ],
+              "items" : {
+                "type" : "string",
+                "format" : "int32"
+              }
+            }
+          }
+        } ]
+      },
+      "TargetOutcome" : {
+        "description" : "Conforms to object created by the createExposureOutcome function of SelfControlledCohort",
+        "required" : [ "targetId", "outcomeIds" ],
+        "properties" : {
+          "targetId" : {
+            "type" : "string",
+            "description" : "Target cohort id",
+            "format" : "int32"
+          },
+          "outcomeIds" : {
+            "description" : "The list of outcome cohort ids",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "int32"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CohortMethodAnalysis" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Analysis"
+        }, {
+          "type" : "object",
+          "description" : "Conforms to object created by the createCmAnalysis function of CohortMethod ",
+          "required" : [ "analysisId" ],
+          "properties" : {
+            "targetType" : {
+              "type" : "string",
+              "description" : "If more than one target is provided for each drugComparatorOutcome, this field should be used to select the specific target to use in this analysis.",
+              "default" : null
+            },
+            "comparatorType" : {
+              "type" : "string",
+              "description" : "If more than one comparator is provided for each drugComparatorOutcome, this field should be used to select the specific comparator to use in this analysis.",
+              "default" : null
+            },
+            "getDbCohortMethodDataArgs" : {
+              "$ref" : "#/components/schemas/GetDbCohortMethodDataArgs",
+              "description" : "An object representing the arguments to be used when calling the getDbCohortMethodData function."
+            },
+            "createStudyPopArgs" : {
+              "$ref" : "#/components/schemas/CreateStudyPopulationArgs",
+              "description" : "An object representing the arguments to be used when calling the createStudyPopulation function."
+            },
+            "createPs" : {
+              "type" : "boolean",
+              "description" : "Should the createPs function be used in this analysis?",
+              "default" : false
+            },
+            "createPsArgs" : {
+              "$ref" : "#/components/schemas/CreatePsArgs",
+              "default" : null
+            },
+            "trimByPs" : {
+              "type" : "boolean",
+              "description" : "Should the trimByPs function be used in this analysis?",
+              "default" : false
+            },
+            "trimByPsArgs" : {
+              "$ref" : "#/components/schemas/TrimByPsArgs",
+              "default" : null
+            },
+            "trimByPsToEquipoise" : {
+              "type" : "boolean",
+              "description" : "Should the trimByPsToEquipoise function be used in this analysis?",
+              "default" : false
+            },
+            "trimByPsToEquipoiseArgs" : {
+              "$ref" : "#/components/schemas/TrimByPsToEquipoiseArgs",
+              "description" : "An object representing the arguments to be used when calling the trimByPsToEquipoise function.",
+              "default" : null
+            },
+            "matchOnPs" : {
+              "type" : "boolean",
+              "description" : "Should the matchOnPsAndCovariates function be used in this analysis?",
+              "default" : false
+            },
+            "matchOnPsArgs" : {
+              "$ref" : "#/components/schemas/MatchOnPsArgs",
+              "description" : "An object representing the arguments to be used when calling the matchOnPsAndCovariates function.",
+              "default" : null
+            },
+            "matchOnPsAndCovariates" : {
+              "type" : "boolean",
+              "description" : "Should the matchOnPsAndCovariates function be used in this analysis?",
+              "default" : false
+            },
+            "matchOnPsAndCovariatesArgs" : {
+              "$ref" : "#/components/schemas/MatchOnPsAndCovariatesArgs",
+              "description" : "An object representing the arguments to be used when calling the matchOnPsAndCovariates function.",
+              "default" : null
+            },
+            "stratifyByPs" : {
+              "type" : "boolean",
+              "description" : "Should the stratifyByPs function be used in this analysis?",
+              "default" : false
+            },
+            "stratifyByPsArgs" : {
+              "$ref" : "#/components/schemas/StratifyByPsArgs",
+              "description" : "An object representing the arguments to be used when calling the stratifyByPs function.",
+              "default" : null
+            },
+            "stratifyByPsAndCovariates" : {
+              "type" : "boolean",
+              "description" : "Should the stratifyByPsAndCovariates function be used in this analysis?",
+              "default" : false
+            },
+            "stratifyByPsAndCovariatesArgs" : {
+              "$ref" : "#/components/schemas/StratifyByPsAndCovariatesArgs",
+              "description" : "An object representing the arguments to be used when calling the stratifyByPsAndCovariates function.",
+              "default" : null
+            },
+            "computeCovariateBalance" : {
+              "type" : "string",
+              "description" : "Should the computeCovariateBalance function be used in this analysis?",
+              "default" : false
+            },
+            "fitOutcomeModel" : {
+              "type" : "boolean",
+              "description" : "Should the fitOutcomeModel function be used in this analysis?",
+              "default" : false
+            },
+            "fitOutcomeModelArgs" : {
+              "type" : "string",
+              "description" : "An object representing the arguments to be used when calling the fitOutcomeModel function.",
+              "$ref" : "#/components/schemas/FitOutcomeModelArgs",
+              "default" : null
+            }
+          }
+        } ]
+      },
+      "CovariateSettings" : {
+        "type" : "object",
+        "$ref": "FeatureExtraction.json#/components/schemas/CovariateSettings"
+      },
+      "StratifyByPsArgs" : {
+        "description" : "Defines the set of parameters used when stratifying by propensity score",
+        "required" : [ "numberOfStrata" ],
+        "properties" : {
+          "numberOfStrata" : {
+            "type" : "integer",
+            "description" : "How many strata? The boundaries of the strata are automatically defined to contain equal numbers of target persons.",
+            "default" : 5
+          },
+          "baseSelection" : {
+            "type" : "string",
+            "description" : "What is the base selection of subjects where the strata bounds are to be determined? Strata are defined as equally-sized strata inside this selection. Possible values are \"all\", \"target\", and \"comparator\".",
+            "default" : "all",
+            "enum" : [ "all", "target", "comparator" ]
+          },
+          "stratificationColumns" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "Names of one or more columns in the data data.frame on which subjects should also be stratified in addition to stratification on propensity score.",
+            "default" : [ ],
+            "x-ohdsi-atlas-display" : false
+          }
+        },
+        "type" : "object"
+      },
+      "StratifyByPsAndCovariatesArgs" : {
+        "description" : "Defines the set of parameters used when stratifying by propensity score and covariates",
+        "required" : [ "numberOfStrata" ],
+        "properties" : {
+          "numberOfStrata" : {
+            "type" : "integer",
+            "description" : "Into how many strata should the propensity score be divided? The boundaries of the strata are automatically defined to contain equal numbers of target persons.",
+            "default" : 5
+          },
+          "baseSelection" : {
+            "type" : "string",
+            "description" : "What is the base selection of subjects where the strata bounds are to be determined? Strata are defined as equally-sized strata inside this selection. Possible values are \"all\", \"target\", and \"comparator\".",
+            "default" : "all",
+            "enum" : [ "all", "target", "comparator" ]
+          },
+          "covariateIds" : {
+            "type" : "array",
+            "description" : "One or more covariate IDs in the cohortMethodData object on which subjects should also be stratified.",
+            "items" : {
+              "type" : "integer"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "GetDbCohortMethodDataArgs" : {
+        "description" : "Create a parameter object for the function getDbCohortMethodData",
+        "properties" : {
+          "studyStartDate" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "A calendar date specifying the minimum date that a cohort index date can appear. Date format is 'yyyymmdd'.",
+            "default" : ""
+          },
+          "studyEndDate" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "A calendar date specifying the maximum date that a cohort index date can appear. Date format is 'yyyymmdd'. Important - the study end date is also used to truncate risk windows, meaning no outcomes beyond the study end date will be considered.",
+            "default" : ""
+          },
+          "excludeDrugsFromCovariates" : {
+            "type" : "boolean",
+            "description" : "Should the target and comparator drugs (and their descendant concepts) be excluded from the covariates? Note that this will work if the drugs are actualy drug concept IDs (and not cohort IDs).",
+            "default" : true
+          },
+          "firstExposureOnly" : {
+            "type" : "boolean",
+            "description" : "Should only the first exposure per subject be included? Note that this is typically done in the createStudyPopulation function, but can already be done here for efficiency reasons.",
+            "default" : false
+          },
+          "removeDuplicateSubjects" : {
+            "type" : "string",
+            "description" : "Remove subjects that are in both the target and comparator cohort? Note that this is typically done in the createStudyPopulation function, but can already be done here for efficiency reasons.",
+            "default" : "keep all",
+            "enum" : [ "keep all", "keep first", "remove all" ]
+          },
+          "restrictToCommonPeriod" : {
+            "type" : "boolean",
+            "description" : "Restrict the analysis to the period when both exposures are observed?",
+            "default" : false
+          },
+          "washoutPeriod" : {
+            "type" : "integer",
+            "description" : "The mininum required continuous observation time prior to index date for a person to be included in the cohort. Note that this is typically done in the createStudyPopulation function,but can already be done here for efficiency reasons.",
+            "default" : 0
+          },
+          "maxCohortSize" : {
+            "type" : "integer",
+            "description" : "If either the target or the comparator cohort is larger than this number it will be sampled to this size. maxCohortSize = 0 indicates no maximum size.",
+            "default" : 0
+          },
+          "covariateSettings" : {
+            "$ref" : "#/components/schemas/CovariateSettings",
+            "description" : "An object of type covariateSettings as created using the createCovariateSettings function in the FeatureExtraction package."
+          }
+        },
+        "type" : "object"
+      },
+      "CreateStudyPopulationArgs" : {
+        "description" : "Create a parameter object for the function createStudyPopulation",
+        "properties" : {
+          "firstExposureOnly" : {
+            "type" : "boolean",
+            "description" : "Should only the first exposure per subject be included? Note that this is typically done in the createStudyPopulation function",
+            "default" : false
+          },
+          "restrictToCommonPeriod" : {
+            "type" : "boolean",
+            "description" : "Restrict the analysis to the period when both exposures are observed?",
+            "default" : false
+          },
+          "washoutPeriod" : {
+            "type" : "integer",
+            "description" : "The minimum required continuous observation time prior to index date for a person to be included in the cohort.",
+            "default" : 0
+          },
+          "removeDuplicateSubjects" : {
+            "type" : "string",
+            "description" : "Remove subjects that are in both the target and comparator cohort?",
+            "default" : "keep all",
+            "enum" : [ "keep all", "keep first", "remove all" ]
+          },
+          "removeSubjectsWithPriorOutcome" : {
+            "type" : "boolean",
+            "description" : "Remove subjects that have the outcome prior to the risk window start?",
+            "default" : false
+          },
+          "priorOutcomeLookback" : {
+            "type" : "integer",
+            "description" : "How many days should we look back when identifying prior outcomes?",
+            "default" : 99999
+          },
+          "minDaysAtRisk" : {
+            "type" : "integer",
+            "description" : "The minimum required number of days at risk.",
+            "default" : 1
+          },
+          "riskWindowStart" : {
+            "type" : "integer",
+            "description" : "The start of the risk window (in days) relative to the indexdate (+ days of exposure if theaddExposureDaysToStart parameter is specified).",
+            "default" : 0
+          },
+          "addExposureDaysToStart" : {
+            "type" : "boolean",
+            "description" : "Add the length of exposure the start of the risk window?",
+            "default" : false
+          },
+          "riskWindowEnd" : {
+            "type" : "integer",
+            "description" : "The end of the risk window (in days) relative to the index date (+ days of exposure if the addExposureDaysToEnd parameter is specified).",
+            "default" : 0
+          },
+          "addExposureDaysToEnd" : {
+            "type" : "boolean",
+            "description" : "Add the length of exposure the risk window?",
+            "default" : true
+          },
+          "censorAtNewRiskWindow" : {
+            "type" : "boolean",
+            "description" : "If a subject is in multiple cohorts, should time-at-risk be censored when the new time-at-risk start to prevent overlap?"
+          }
+        },
+        "type" : "object"
+      },
+      "CreatePsArgs" : {
+        "description" : "Create a parameter object for the function createPs",
+        "properties" : {
+          "excludeCovariateIds" : {
+            "type" : "array",
+            "description" : "Exclude these covariates from the propensity model.",
+            "default" : [ ],
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "includeCovariateIds" : {
+            "type" : "array",
+            "description" : "Include only these covariates in the propensity model.",
+            "default" : [ ],
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "maxCohortSizeForFitting" : {
+            "type" : "integer",
+            "default" : 250000,
+            "description" : "If the target or comparator cohort are larger than this number, they will be down-sampled before fitting the propensity model. The model will be used to compute propensity scores for all subjects. The purpose of the sampling is to gain speed. Setting this number to 0 means no down-sampling will be applied.          "
+          },
+          "errorOnHighCorrelation" : {
+            "type" : "boolean",
+            "description" : "If true, the function will test each covariate for correlation with the target assignment. If any covariate has an unusually high correlation (either positive or negative), this will throw an error.",
+            "default" : true
+          },
+          "stopOnError" : {
+            "type" : "boolean",
+            "description" : "If an error occurs, should the function stop? Else, the two cohorts will be assumed to be perfectly separable.",
+            "default" : true
+          },
+          "prior" : {
+            "$ref" : "#/components/schemas/Prior",
+            "description" : "The prior used to fit the model.",
+            "default" : [ "laplace", "exclude = c(0)", "useCrossValidation = TRUE" ]
+          },
+          "control" : {
+            "$ref" : "#/components/schemas/Control",
+            "description" : "The control object used to control the cross-validation used to determine the hyperparameters of the prior (if applicable). ",
+            "default" : [ "noiseLevel = 'silent'", "cvType = 'auto'", "tolerance =  2e-07", "cvRepetitions = 10", "startingVariance = 0.01" ]
+          }
+        },
+        "type" : "object"
+      },
+      "TrimByPsArgs" : {
+        "description" : "Create a parameter object for the function trimByPs",
+        "properties" : {
+          "trimFraction" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "This fraction will be removed from each target group. In the target group, persons with the highest propensity scores will be removed, in the comparator group person with the lowest scores will be removed.",
+            "default" : 0.05
+          }
+        },
+        "type" : "object"
+      },
+      "TrimByPsToEquipoiseArgs" : {
+        "description" : "Create a parameter object for the function trimByPsToEquipoise",
+        "properties" : {
+          "bounds" : {
+            "type" : "array",
+            "description" : "The upper and lower bound on the preference score for keeping persons",
+            "default" : [ 0.25, 0.75 ],
+            "items" : {
+              "type" : "number",
+              "format" : "float"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "MatchOnPsArgs" : {
+        "description" : "Create a parameter object for the function matchOnPsAndCovariates",
+        "properties" : {
+          "caliper" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "The caliper for matching. A caliper is the distance which is acceptable for any match. Observations which are outside of the caliper are dropped. A caliper of 0 means no caliper is used.",
+            "default" : 0.2
+          },
+          "caliperScale" : {
+            "type" : "string",
+            "description" : "The scale on which the caliper is defined. Three scales are supported are 'propensity score', 'standardized', or 'standardized logit'. On the standardized scale, the caliper is interpreted in standard deviations of the propensity score distribution. 'standardized logit' is similar, except that the propensity score is transformed to the logit scale because the PS is more likely to be normally distributed on that scale(Austin, 2011).",
+            "default" : "standardized logit",
+            "enum" : [ "propensity score", "standardized", "standardized logit" ]
+          },
+          "maxRatio" : {
+            "type" : "integer",
+            "description" : "The maximum number of persons int the comparator arm to be matched to each person in the target arm. A maxRatio of 0 means no maximum - all comparators will be assigned to a target person.",
+            "default" : 1
+          },
+          "stratificationColumns" : {
+            "type" : "array",
+            "description" : "Names or numbers of one or more columns in the data data.frame on which subjects should be stratified prior to matching. No personswill be matched with persons outside of the strata identified by thevalues in these columns.",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "MatchOnPsAndCovariatesArgs" : {
+        "description" : "Create a parameter object for the function matchOnPsAndCovariates",
+        "properties" : {
+          "caliper" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "The caliper for matching. A caliper is the distance which is acceptable for any match. Observations which are outside of the caliper are dropped. A caliper of 0 means no caliper is used.",
+            "default" : 0.2
+          },
+          "caliperScale" : {
+            "type" : "string",
+            "description" : "The scale on which the caliper is defined. Three scales are supported are 'propensity score', 'standardized', or 'standardized logit'. On the standardized scale, the caliper is interpreted in standard deviations of the propensity score distribution. 'standardized logit' is similar, except that the propensity score is transformed to the logit scale because the PS is more likely to be normally distributed on that scale(Austin, 2011).",
+            "default" : "standardized logit",
+            "enum" : [ "propensity score", "standardized", "standardized logit" ]
+          },
+          "maxRatio" : {
+            "type" : "integer",
+            "description" : "The maximum number of persons int the comparator arm to be matched to each person in the target arm. A maxRatio of 0 means no maximum - all comparators will be assigned to a target person.",
+            "default" : 1
+          },
+          "covariateIds" : {
+            "type" : "array",
+            "description" : "One or more covariate IDs in the cohortMethodData object on whichsubjects should be also matched.",
+            "items" : {
+              "type" : "integer"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "FitOutcomeModelArgs" : {
+        "description" : "Create a parameter object for the function fitOutcomeModel",
+        "required" : [ "modelType" ],
+        "properties" : {
+          "modelType" : {
+            "type" : "string",
+            "description" : "The type of outcome model that will be used. Possible values are \"logistic\", \"poisson\", or \"cox\".",
+            "default" : "logistic",
+            "enum" : [ "logistic", "poisson", "cox" ]
+          },
+          "stratified" : {
+            "type" : "boolean",
+            "description" : "Should the regression be conditioned on the strata defined in the population object (e.g. by matching or stratifying on propensity scores)?",
+            "default" : true
+          },
+          "useCovariates" : {
+            "type" : "boolean",
+            "description" : "Whether to use the covariate matrix in the cohortMethodDataobject in the outcome model.",
+            "default" : true
+          },
+          "inversePtWeighting" : {
+            "type" : "boolean",
+            "description" : "Use inverse probability of treatment weigting?",
+            "default" : false
+          },
+          "interactionCovariateIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
+            "description" : "An optional vector of covariate IDs to use to estimate interactions with the main treatment effect.",
+            "default" : [ ]
+          },
+          "excludeCovariateIds" : {
+            "type" : "array",
+            "default" : [ ],
+            "description" : "Exclude these covariates from the outcome model.",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "includeCovariateIds" : {
+            "type" : "array",
+            "default" : [ ],
+            "description" : "Include only these covariates in the outcome model.",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "prior" : {
+            "description" : "The prior used to fit the model.",
+            "$ref" : "#/components/schemas/Prior"
+          },
+          "control" : {
+            "description" : "The control object used to control the cross-validation used todetermine the hyperparameters of the prior (if applicable). ",
+            "$ref" : "#/components/schemas/Control"
+          }
+        },
+        "type" : "object"
+      },
+      "Prior" : {
+        "description" : "creates a Cyclops prior object for use with fitCyclopsModel.",
+        "required" : [ "priorType" ],
+        "properties" : {
+          "priorType" : {
+            "type" : "string",
+            "description" : "Specifies prior distribution. We specify all priors in terms of their variance parameters. Similar fitting tools for regularized regression often parameterize the Laplace distribution in terms of a rate \"lambda\" per observation. See \"glmnet\", for example.  variance = 2 * / (nobs * lambda)^2 or lambda = sqrt(2 / variance) / nobs"
+          },
+          "variance" : {
+            "type" : "integer",
+            "description" : "prior distribution variance"
+          },
+          "exclude" : {
+            "type" : "array",
+            "description" : "A vector of numbers or covariateId names to exclude from prior",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "graph" : {
+            "type" : "string",
+            "description" : "Child-to-parent mapping for a hierarchical prior            ",
+            "default" : null
+          },
+          "neighborhood" : {
+            "type" : "string",
+            "description" : "A list of first-order neighborhoods for a partially fused prior",
+            "default" : null
+          },
+          "useCrossValidation" : {
+            "type" : "boolean",
+            "description" : "Perform cross-validation to determine prior variance.",
+            "default" : false
+          },
+          "forceIntercept" : {
+            "type" : "boolean",
+            "description" : "Force intercept coefficient into prior",
+            "default" : false
+          }
+        },
+        "type" : "object"
+      },
+      "Control" : {
+        "description" : "creates a Cyclops control object for use with fitCyclopsModel.",
+        "properties" : {
+          "maxIterations" : {
+            "type" : "integer",
+            "description" : "maximum iterations of Cyclops to attempt before returning a failed-to-converge error ",
+            "default" : 1000
+          },
+          "tolerance" : {
+            "type" : "integer",
+            "description" : "maximum relative change in convergence criterion from successive iterations to achieve convergence",
+            "default" : 1000000
+          },
+          "convergenceType" : {
+            "type" : "string",
+            "description" : "name of convergence criterion to employ",
+            "default" : "gradient"
+          },
+          "cvType" : {
+            "type" : "string",
+            "description" : "name of cross validation search. Option \"auto\" selects an auto-search following BBR. Option \"grid\" selects a grid-search cross validation ",
+            "default" : "auto"
+          },
+          "fold" : {
+            "type" : "integer",
+            "description" : "Number of random folds to employ in cross validation",
+            "default" : 10
+          },
+          "lowerLimit" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "Lower prior variance limit for grid-search",
+            "default" : 0.01
+          },
+          "upperLimit" : {
+            "type" : "number",
+            "description" : "Upper prior variance limit for grid-search",
+            "default" : 20
+          },
+          "gridSteps" : {
+            "type" : "number",
+            "description" : "Number of steps in grid-search",
+            "default" : 10
+          },
+          "cvRepetitions" : {
+            "type" : "number",
+            "description" : "Number of repetitions of X-fold cross validation",
+            "default" : 1
+          },
+          "minCVData" : {
+            "type" : "number",
+            "description" : "Minumim number of data for cross validation",
+            "default" : 100
+          },
+          "noiseLevel" : {
+            "type" : "string",
+            "description" : "level of Cyclops screen output (\"silent\", \"quiet\", \"noisy\")",
+            "default" : "silent"
+          },
+          "threads" : {
+            "type" : "number",
+            "description" : "Specify number of CPU threads to employ in cross-validation; default = 1 (auto = -1)",
+            "default" : 1
+          },
+          "seed" : {
+            "type" : "number",
+            "description" : "Specify random number generator seed. A null value sets seed via Sys.time.",
+            "default" : null
+          },
+          "resetCoefficients" : {
+            "type" : "boolean",
+            "description" : "Reset all coefficients to 0 between model fits under cross-validation",
+            "default" : false
+          },
+          "startingVariance" : {
+            "type" : "number",
+            "description" : "Starting variance for auto-search cross-validation; default = -1 (use estimate based on data)",
+            "default" : -1
+          },
+          "useKKTSwindle" : {
+            "type" : "boolean",
+            "description" : "Use the Karush-Kuhn-Tucker conditions to limit search",
+            "default" : false
+          },
+          "tuneSwindle" : {
+            "type" : "number",
+            "description" : "Size multiplier for active set",
+            "default" : 10
+          },
+          "selectorType" : {
+            "type" : "string",
+            "description" : "name of exchangeable sampling unit. Option \"byPid\" selects entire strata. Option \"byRow\" selects single rows. If set to \"auto\", \"byRow\" will be used for all models except conditional models where the average number of rows per stratum is smaller than the number of strata.",
+            "default" : "auto"
+          },
+          "initialBound" : {
+            "type" : "number",
+            "description" : "Starting trust-region size",
+            "default" : 2
+          },
+          "maxBoundCount" : {
+            "type" : "number",
+            "description" : "Maximum number of tries to decrease initial trust-region size",
+            "default" : 5
+          }
+        },
+        "type" : "object"
+      },
+      "InjectSignalsArgs" : {
+        "description" : "Inject signals in the database",
+        "properties" : {
+          "exposureOutcomePairs" : {
+            "$ref" : "#/components/schemas/TargetOutcome",
+            "description" : "'A data frame with at least two columns -     1. exposureId containing the drug_concept_ID or cohort_concept_id of the exposure variable    2. outcomeId containing the condition_concept_ID or cohort_concept_id of the outcome variable'"
+          },
+          "modelType" : {
+            "type" : "string",
+            "description" : "Can be either \"poisson\" or \"survival\"",
+            "default" : "poisson",
+            "enum" : [ "poisson", "survival" ]
+          },
+          "buildOutcomeModel" : {
+            "type" : "boolean",
+            "description" : "Should an outcome model be created to predict outcomes. New outcomes will be inserted based on the predicted probabilities according to this model, and this will help preserve the observed confounding when injecting signals.",
+            "default" : true
+          },
+          "buildModelPerExposure" : {
+            "type" : "boolean",
+            "description" : "If TRUE, an outcome model will be created for each exposure ID. IF false, outcome models will be created across all exposures.",
+            "default" : false
+          },
+          "minOutcomeCountForModel" : {
+            "type" : "integer",
+            "description" : "Minimum number of outcome events required to build a model.",
+            "default" : 100
+          },
+          "minOutcomeCountForInjection" : {
+            "type" : "integer",
+            "description" : "Minimum number of outcome events required to inject a signal.",
+            "default" : 25
+          },
+          "covariateSettings" : {
+            "$ref" : "#/components/schemas/CovariateSettings"
+          },
+          "prior" : {
+            "$ref" : "#/components/schemas/Prior"
+          },
+          "control" : {
+            "$ref" : "#/components/schemas/Control"
+          },
+          "firstExposureOnly" : {
+            "type" : "boolean",
+            "description" : "Should signals be injected only for the first exposure? (ie. assuming an acute effect)",
+            "default" : false
+          },
+          "washoutPeriod" : {
+            "type" : "integer",
+            "description" : "Number of days at the start of observation for which no signals will be injected, but will be used to determine whether exposure or outcome is the first one, and for extracting covariates to build the outcome model.",
+            "default" : 183
+          },
+          "riskWindowStart" : {
+            "type" : "integer",
+            "description" : "The start of the risk window relative to the start of the exposure (in days). When 0, risk is assumed to start on the first day of exposure.",
+            "default" : 0
+          },
+          "riskWindowEnd" : {
+            "type" : "integer",
+            "description" : "The end of the risk window relative to the start of the exposure. Note that typically the length of exposure is added to this number (when the addExposureDaysToEnd parameter is set to TRUE).",
+            "default" : 0
+          },
+          "addExposureDaysToEnd" : {
+            "type" : "boolean",
+            "description" : "Should length of exposure be added to the risk window?",
+            "default" : true
+          },
+          "firstOutcomeOnly" : {
+            "type" : "boolean",
+            "description" : "Should only the first outcome per person be considered when modeling the outcome?",
+            "default" : false
+          },
+          "removePeopleWithPriorOutcomes" : {
+            "type" : "boolean",
+            "description" : "Remove people with prior outcomes?",
+            "default" : false
+          },
+          "maxSubjectsForModel" : {
+            "type" : "integer",
+            "description" : "Maximum number of people used to fit an outcome model.",
+            "default" : 100000
+          },
+          "effectSizes" : {
+            "type" : "array",
+            "description" : "A numeric vector of effect sizes that should be inserted.",
+            "items" : {
+              "type" : "number",
+              "format" : "float"
+            },
+            "default" : [ 1, 1.25, 1.5, 2, 4 ]
+          },
+          "precision" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "The allowed ratio between target and injected signal size.",
+            "default" : 0.01
+          },
+          "outputIdOffset" : {
+            "type" : "integer",
+            "description" : "What should be the first new outcome ID that is to be created?",
+            "default" : 1000
+          }
+        },
+        "type" : "object"
+      },
+      "CohortDefinition" : {
+        "description" : "The set of persons satisfying one or more inclusion criteria for a duration of time",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "The identifier for the cohort"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the cohort"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "The description of the cohort"
+          },
+          "expressionType" : {
+            "type" : "string",
+            "description" : "Type of cohort definition",
+            "default" : "SIMPLE_EXPRESSION"
+          },
+          "expression" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/CohortExpression"
+            }, {
+              "$ref" : "#/components/schemas/NegativeControlCohortExpression"
+            } ]
+          },
+          "createdBy" : {
+            "type" : "string",
+            "description" : "The person who created the cohort"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "description" : "The date and time the cohort was first saved"
+          },
+          "modifiedBy" : {
+            "type" : "string",
+            "description" : "The person who crea upte d"
+          },
+          "modifiedDate" : {
+            "type" : "string",
+            "format" : "datetime",
+            "description" : "The date and time the cohort was last saved"
+          }
+        },
+        "type" : "object"
+      },
+      "CohortExpression" : {
+        "description" : "The expression that defines the criteria for inclusion and duration of time",
+        "properties" : {
+          "conceptSets" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ConceptSet"
+            }
+          },
+          "primaryCriteria" : {
+            "type" : "string"
+          },
+          "qualifiedLimit" : {
+            "type" : "string"
+          },
+          "expressionLimit" : {
+            "type" : "string"
+          },
+          "inclusionRules" : {
+            "type" : "string"
+          },
+          "censoringCriteria" : {
+            "type" : "string"
+          },
+          "collapseSettings" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ConceptSet" : {
+        "type" : "object",
+        "description" : "'Placholder - reference is defined at https://app.swaggerhub.com/apis/anthonysena5/ConceptSetExpression/1.0.0'"
+      },
+      "ConceptSetExpression" : {
+        "type" : "object",
+        "description" : "Placholder - reference is defined at https://app.swaggerhub.com/apis/anthonysena5/ConceptSetExpression/1.0.0"
+      },
+      "NegativeControlCohortExpression" : {
+        "description" : "The expression that defines the criteria for inclusion and duration of time for cohorts intended for use as negative controls. The following describes the criteria of the cohort expression using its properties |<occurrenceType> occurrence(s) of <negativeControlConceptSet.conceptId> and <negativeControlSet.detectOnDescendants> in <domain> in a person’s history |This expression will be evaluated for each conceptId in the negativeControlConceptSet",
+        "properties" : {
+          "occurrenceType" : {
+            "type" : "string",
+            "description" : "The type of occurrence of the event when selecting from the domain. The options are \"All\" or \"First\""
+          },
+          "detectOnDescendants" : {
+            "type" : "boolean",
+            "description" : "When true, desendant concepts for the conceptId will be used to detect the exposure/outcome and roll up the occurrence to the conceptId"
+          },
+          "domains" : {
+            "type" : "array",
+            "description" : "Specifies to the domains to use when evaluating negative control events. ",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "NegativeControl" : {
+        "description" : "Specifies a negative control outcome to use for empirically calibrating a selected target and comparator",
+        "properties" : {
+          "targetId" : {
+            "type" : "integer",
+            "description" : "The identifier for the target cohort"
+          },
+          "comparatorId" : {
+            "type" : "integer",
+            "description" : "The identifier for the comparator cohort"
+          },
+          "outcomeId" : {
+            "type" : "integer",
+            "description" : "The identifier for the negative control cohort"
+          },
+          "outcomeName" : {
+            "type" : "string",
+            "description" : "The name of the negative control cohort"
+          }
+        }
+      }
+    }
+  }
+}
