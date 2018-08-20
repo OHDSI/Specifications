@@ -87,14 +87,17 @@
               "$ref" : "#/components/schemas/ConceptSet"
             }
           },
-          "injectSignalsArgs" : {
-            "$ref" : "#/components/schemas/InjectSignalsArgs"
-          },
           "negativeControls" : {
             "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/NegativeControl"
             }
+          },
+          "injectSignalsArgs" : {
+            "$ref" : "#/components/schemas/InjectSignalsArgs"
+          },
+          "negativeControlCohortDefinition" : {
+            "$ref" : "#/components/schemas/NegativeControlCohortExpression"
           },
           "estimationAnalysisSettings" : {
             "$ref" : "#/components/schemas/EstimationAnalysisSettings"
@@ -1776,42 +1779,12 @@
         "type" : "object"
       },
       "CohortExpression" : {
-        "description" : "The expression that defines the criteria for inclusion and duration of time",
-        "properties" : {
-          "conceptSets" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/ConceptSet"
-            }
-          },
-          "primaryCriteria" : {
-            "type" : "string"
-          },
-          "qualifiedLimit" : {
-            "type" : "string"
-          },
-          "expressionLimit" : {
-            "type" : "string"
-          },
-          "inclusionRules" : {
-            "type" : "string"
-          },
-          "censoringCriteria" : {
-            "type" : "string"
-          },
-          "collapseSettings" : {
-            "type" : "string"
-          }
-        },
-        "type" : "object"
+        "type" : "object",
+        "$ref" : "CohortDefinition.json#/components/schemas/CohortDefinition"
       },
       "ConceptSet" : {
         "type" : "object",
-        "description" : "'Placholder - reference is defined at https://app.swaggerhub.com/apis/anthonysena5/ConceptSetExpression/1.0.0'"
-      },
-      "ConceptSetExpression" : {
-        "type" : "object",
-        "description" : "Placholder - reference is defined at https://app.swaggerhub.com/apis/anthonysena5/ConceptSetExpression/1.0.0"
+        "$ref" : "ConceptSet.json#/components/schemas/ConceptSet"
       },
       "NegativeControlCohortExpression" : {
         "description" : "The expression that defines the criteria for inclusion and duration of time for cohorts intended for use as negative controls. The following describes the criteria of the cohort expression using its properties |<occurrenceType> occurrence(s) of <negativeControlConceptSet.conceptId> and <negativeControlSet.detectOnDescendants> in <domain> in a person’s history |This expression will be evaluated for each conceptId in the negativeControlConceptSet",
