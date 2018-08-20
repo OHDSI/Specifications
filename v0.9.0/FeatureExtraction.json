@@ -1,0 +1,627 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "Feature Extraction",
+    "url" : "https://github.com/OHDSI/Specifications/v0.9.0/CovariateSettings"
+  } ],
+  "info" : {
+    "description" : "Based on OHDSI Feature Extraction (https://github.com/OHDSI/FeatureExtraction)",
+    "version" : "0.9.0",
+    "title" : "Feature Extraction",
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "paths" : {
+    "/" : {
+      "get" : {
+        "summary" : "Get a list of covariate settings",
+        "operationId" : "getCovariateSettings",
+        "description" : "This is a placeholder method",
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CovariateSettings"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "CovariateSettings" : {
+        "description" : "Object to hold covariate settings for use with FeatureExtraction v2.1.4",
+        "properties" : {
+          "useDemographicsGender" : {
+            "type" : "boolean",
+            "description" : "Gender of the subject. (analysis ID 1)",
+            "default" : false
+          },
+          "useDemographicsAge" : {
+            "type" : "boolean",
+            "description" : "Age of the subject on the index date (in years). (analysis ID 2)",
+            "default" : false
+          },
+          "useDemographicsAgeGroup" : {
+            "type" : "boolean",
+            "description" : "Age of the subject on the index date (in 5 year age groups) (analysis ID 3)",
+            "default" : false
+          },
+          "useDemographicsRace" : {
+            "type" : "boolean",
+            "description" : "Race of the subject. (analysis ID 4)",
+            "default" : false
+          },
+          "useDemographicsEthnicity" : {
+            "type" : "boolean",
+            "description" : "Ethnicity of the subject. (analysis ID 5)",
+            "default" : false
+          },
+          "useDemographicsIndexYear" : {
+            "type" : "boolean",
+            "description" : "Year of the index date. (analysis ID 6)",
+            "default" : false
+          },
+          "useDemographicsIndexMonth" : {
+            "type" : "boolean",
+            "description" : "Month of the index date. (analysis ID 7)",
+            "default" : false
+          },
+          "useDemographicsPriorObservationTime" : {
+            "type" : "boolean",
+            "description" : "Number of continuous days of observation time preceding the index date. (analysis ID 8)",
+            "default" : false
+          },
+          "useDemographicsPostObservationTime" : {
+            "type" : "boolean",
+            "description" : "Number of continuous days of observation time preceding the index date. (analysis ID 9)",
+            "default" : false
+          },
+          "useDemographicsTimeInCohort" : {
+            "type" : "boolean",
+            "description" : "Number of days of observation time during cohort period. (analysis ID 10)",
+            "default" : false
+          },
+          "useDemographicsIndexYearMonth" : {
+            "type" : "boolean",
+            "description" : "Both calendar year and month of the index date in a single variable. (analysis ID 11)",
+            "default" : false
+          },
+          "useConditionOccurrenceAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_occurrence table starting any time prior to index. (analysis ID 101)",
+            "default" : false
+          },
+          "useConditionOccurrenceLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_occurrence table starting in the long term window. (analysis ID 102)",
+            "default" : false
+          },
+          "useConditionOccurrenceMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_occurrence table starting in the medium term window. (analysis ID 103)",
+            "default" : false
+          },
+          "useConditionOccurrenceShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_occurrence table starting in the short term window. (analysis ID 104)",
+            "default" : false
+          },
+          "useConditionOccurrenceInpatientAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition observed in an inpatient setting in the condition_occurrence table starting any time prior to index. (analysis ID 105)",
+            "default" : false
+          },
+          "useConditionOccurrenceInpatientLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition observed in an inpatient setting in the condition_occurrence table starting in the long term window. (analysis ID 106)",
+            "default" : false
+          },
+          "useConditionOccurrenceInpatientMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition observed in an inpatient setting in the condition_occurrence table starting in the medium term window. (analysis ID 107)",
+            "default" : false
+          },
+          "useConditionOccurrenceInpatientShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition observed in an inpatient setting in the condition_occurrence table starting in the short term window. (analysis ID 108)",
+            "default" : false
+          },
+          "useConditionEraAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_era table overlapping with any time prior to index. (analysis ID 201)",
+            "default" : false
+          },
+          "useConditionEraLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_era table overlapping with any part of the long term window. (analysis ID 202)",
+            "default" : false
+          },
+          "useConditionEraMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_era table overlapping with any part of the medium term window. (analysis ID 203)",
+            "default" : false
+          },
+          "useConditionEraShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_era table overlapping with any part of the short term window. (analysis ID 204)",
+            "default" : false
+          },
+          "useConditionEraOverlapping" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_era table overlapping with the end of the risk window. (analysis ID 205)",
+            "default" : false
+          },
+          "useConditionEraStartLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_era table starting in the long term window. (analysis ID 206)",
+            "default" : false
+          },
+          "useConditionEraStartMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_era table starting in the medium term window. (analysis ID 207)",
+            "default" : false
+          },
+          "useConditionEraStartShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition in the condition_era table starting in the short term window. (analysis ID 208)",
+            "default" : false
+          },
+          "useConditionGroupEraAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition era rolled up to groups in the condition_era table overlapping with any time prior to index. (analysis ID 209)",
+            "default" : false
+          },
+          "useConditionGroupEraLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition era rolled up to groups in the condition_era table overlapping with any part of the long term window. (analysis ID 210)",
+            "default" : false
+          },
+          "useConditionGroupEraMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition era rolled up to groups in the condition_era table overlapping with any part of the medium term window. (analysis ID 211)",
+            "default" : false
+          },
+          "useConditionGroupEraShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition era rolled up to groups in the condition_era table overlapping with any part of the short term window. (analysis ID 212)",
+            "default" : false
+          },
+          "useConditionGroupEraOverlapping" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition era rolled up to groups in the condition_era table overlapping with the end of the risk window. (analysis ID 213)",
+            "default" : false
+          },
+          "useConditionGroupEraStartLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition era rolled up to groups in the condition_era table starting in the long term window. (analysis ID 214)",
+            "default" : false
+          },
+          "useConditionGroupEraStartMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition era rolled up to groups in the condition_era table starting in the medium term window. (analysis ID 215)",
+            "default" : false
+          },
+          "useConditionGroupEraStartShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per condition era rolled up to groups in the condition_era table starting in the short term window. (analysis ID 216)",
+            "default" : false
+          },
+          "useDrugExposureAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_exposure table starting any time prior to index. (analysis ID 301)",
+            "default" : false
+          },
+          "useDrugExposureLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_exposure table starting in the long term window. (analysis ID 302)",
+            "default" : false
+          },
+          "useDrugExposureMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_exposure table starting in the medium term window. (analysis ID 303)",
+            "default" : false
+          },
+          "useDrugExposureShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_exposure table starting in the short term window. (analysis ID 304)",
+            "default" : false
+          },
+          "useDrugEraAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_era table overlapping with any time prior to index. (analysis ID 401)",
+            "default" : false
+          },
+          "useDrugEraLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_era table overlapping with any part of the long term window. (analysis ID 402)",
+            "default" : false
+          },
+          "useDrugEraMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_era table overlapping with any part of the medium term window. (analysis ID 403)",
+            "default" : false
+          },
+          "useDrugEraShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_era table overlapping with any part of the short window. (analysis ID 404)",
+            "default" : false
+          },
+          "useDrugEraOverlapping" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_era table overlapping with the end of the risk window. (analysis ID 405)",
+            "default" : false
+          },
+          "useDrugEraStartLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_era table starting in the long term window. (analysis ID 406)",
+            "default" : false
+          },
+          "useDrugEraStartMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_era table starting in the medium term window. (analysis ID 407)",
+            "default" : false
+          },
+          "useDrugEraStartShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug in the drug_era table starting in the long short window. (analysis ID 408)",
+            "default" : false
+          },
+          "useDrugGroupEraAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug rolled up to ATC groups in the drug_era table overlapping with any time prior to index. (analysis ID 409)",
+            "default" : false
+          },
+          "useDrugGroupEraLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug rolled up to ATC groups in the drug_era table overlapping with any part of the long term window. (analysis ID 410)",
+            "default" : false
+          },
+          "useDrugGroupEraMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug rolled up to ATC groups in the drug_era table overlapping with any part of the medium term window. (analysis ID 411)",
+            "default" : false
+          },
+          "useDrugGroupEraShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug rolled up to ATC groups in the drug_era table overlapping with any part of the short term window. (analysis ID 412)",
+            "default" : false
+          },
+          "useDrugGroupEraOverlapping" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug rolled up to ATC groups in the drug_era table overlapping with the end of the risk window. (analysis ID 413)",
+            "default" : false
+          },
+          "useDrugGroupEraStartLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug rolled up to ATC groups in the drug_era table starting in the long term window. (analysis ID 414)",
+            "default" : false
+          },
+          "useDrugGroupEraStartMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug rolled up to ATC groups in the drug_era table starting in the medium term window. (analysis ID 415)",
+            "default" : false
+          },
+          "useDrugGroupEraStartShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per drug rolled up to ATC groups in the drug_era table starting in the short term window. (analysis ID 416)",
+            "default" : false
+          },
+          "useProcedureOccurrenceAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per procedure in the procedure_occurrence table any time prior to index. (analysis ID 501)",
+            "default" : false
+          },
+          "useProcedureOccurrenceLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per procedure in the procedure_occurrence table in the long term window. (analysis ID 502)",
+            "default" : false
+          },
+          "useProcedureOccurrenceMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per procedure in the procedure_occurrence table in the medium term window. (analysis ID 503)",
+            "default" : false
+          },
+          "useProcedureOccurrenceShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per procedure in the procedure_occurrence table in the short term window. (analysis ID 504)",
+            "default" : false
+          },
+          "useDeviceExposureAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per device in the device exposure table starting any time prior to index. (analysis ID 601)",
+            "default" : false
+          },
+          "useDeviceExposureLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per device in the device exposure table starting in the long term window. (analysis ID 602)",
+            "default" : false
+          },
+          "useDeviceExposureMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per device in the device exposure table starting in the medium term window. (analysis ID 603)",
+            "default" : false
+          },
+          "useDeviceExposureShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per device in the device exposure table starting in the short term window. (analysis ID 604)",
+            "default" : false
+          },
+          "useMeasurementAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per measurement in the measurement table any time prior to index. (analysis ID 701)",
+            "default" : false
+          },
+          "useMeasurementLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per measurement in the measurement table in the long term window. (analysis ID 702)",
+            "default" : false
+          },
+          "useMeasurementMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per measurement in the measurement table in the medium term window. (analysis ID 703)",
+            "default" : false
+          },
+          "useMeasurementShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per measurement in the measurement table in the short term window. (analysis ID 704)",
+            "default" : false
+          },
+          "useMeasurementValueAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate containing the value per measurement-unit combination any time prior to index. (analysis ID 705)",
+            "default" : false
+          },
+          "useMeasurementValueLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate containing the value per measurement-unit combination in the long term window. (analysis ID 706)",
+            "default" : false
+          },
+          "useMeasurementValueMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate containing the value per measurement-unit combination in the medium term window. (analysis ID 707)",
+            "default" : false
+          },
+          "useMeasurementValueShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate containing the value per measurement-unit combination in the short term window. (analysis ID 708)",
+            "default" : false
+          },
+          "useMeasurementRangeGroupAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "Covariates indicating whether measurements are below, within, or above normal range any time prior to index. (analysis ID 709)",
+            "default" : false
+          },
+          "useMeasurementRangeGroupLongTerm" : {
+            "type" : "boolean",
+            "description" : "Covariates indicating whether measurements are below, within, or above normal range in the long term window. (analysis ID 710)",
+            "default" : false
+          },
+          "useMeasurementRangeGroupMediumTerm" : {
+            "type" : "boolean",
+            "description" : "Covariates indicating whether measurements are below, within, or above normal range in the medium term window. (analysis ID 711)",
+            "default" : false
+          },
+          "useMeasurementRangeGroupShortTerm" : {
+            "type" : "boolean",
+            "description" : "Covariates indicating whether measurements are below, within, or above normal range in the short term window. (analysis ID 712)",
+            "default" : false
+          },
+          "useObservationAnyTimePrior" : {
+            "type" : "boolean",
+            "description" : "One covariate per observation in the observation table any time prior to index. (analysis ID 801)",
+            "default" : false
+          },
+          "useObservationLongTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per observation in the observation table in the long term window. (analysis ID 802)",
+            "default" : false
+          },
+          "useObservationMediumTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per observation in the observation table in the medium term window. (analysis ID 803)",
+            "default" : false
+          },
+          "useObservationShortTerm" : {
+            "type" : "boolean",
+            "description" : "One covariate per observation in the observation table in the short term window. (analysis ID 804)",
+            "default" : false
+          },
+          "useCharlsonIndex" : {
+            "type" : "boolean",
+            "description" : "The Charlson comorbidity index (Romano adaptation) using all conditions prior to the window end. (analysis ID 901)",
+            "default" : false
+          },
+          "useDcsi" : {
+            "type" : "boolean",
+            "description" : "The Diabetes Comorbidity Severity Index (DCSI) using all conditions prior to the window end. (analysis ID 902)",
+            "default" : false
+          },
+          "useChads2" : {
+            "type" : "boolean",
+            "description" : "The CHADS2 score using all conditions prior to the window end. (analysis ID 903)",
+            "default" : false
+          },
+          "useChads2Vasc" : {
+            "type" : "boolean",
+            "description" : "The CHADS2VASc score using all conditions prior to the window end. (analysis ID 904)",
+            "default" : false
+          },
+          "useDistinctConditionCountLongTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct condition concepts observed in the long term window. (analysis ID 905)",
+            "default" : false
+          },
+          "useDistinctConditionCountMediumTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct condition concepts observed in the medium term window. (analysis ID 906)",
+            "default" : false
+          },
+          "useDistinctConditionCountShortTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct condition concepts observed in the short term window. (analysis ID 907)",
+            "default" : false
+          },
+          "useDistinctIngredientCountLongTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct ingredients observed in the long term window. (analysis ID 908)",
+            "default" : false
+          },
+          "useDistinctIngredientCountMediumTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct ingredients observed in the medium term window. (analysis ID 909)",
+            "default" : false
+          },
+          "useDistinctIngredientCountShortTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct ingredients observed in the short term window. (analysis ID 910)",
+            "default" : false
+          },
+          "useDistinctProcedureCountLongTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct procedures observed in the long term window. (analysis ID 911)",
+            "default" : false
+          },
+          "useDistinctProcedureCountMediumTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct procedures observed in the medium term window. (analysis ID 912)",
+            "default" : false
+          },
+          "useDistinctProcedureCountShortTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct procedures observed in the short term window. (analysis ID 913)",
+            "default" : false
+          },
+          "useDistinctMeasurementCountLongTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct measurements observed in the long term window. (analysis ID 914)",
+            "default" : false
+          },
+          "useDistinctMeasurementCountMediumTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct measurements observed in the medium term window. (analysis ID 915)",
+            "default" : false
+          },
+          "useDistinctMeasurementCountShortTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct measurements observed in the short term window. (analysis ID 916)",
+            "default" : false
+          },
+          "useDistinctObservationCountLongTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct observations observed in the long term window. (analysis ID 917)",
+            "default" : false
+          },
+          "useDistinctObservationCountMediumTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct observations observed in the medium term window. (analysis ID 918)",
+            "default" : false
+          },
+          "useDistinctObservationCountShortTerm" : {
+            "type" : "boolean",
+            "description" : "The number of distinct observations observed in the short term window. (analysis ID 919)",
+            "default" : false
+          },
+          "useVisitCountLongTerm" : {
+            "type" : "boolean",
+            "description" : "The number of visits observed in the long term window. (analysis ID 920)",
+            "default" : false
+          },
+          "useVisitCountMediumTerm" : {
+            "type" : "boolean",
+            "description" : "The number of visits observed in the medium term window. (analysis ID 921)",
+            "default" : false
+          },
+          "useVisitCountShortTerm" : {
+            "type" : "boolean",
+            "description" : "The number of visits observed in the short term window. (analysis ID 922)",
+            "default" : false
+          },
+          "useVisitConceptCountLongTerm" : {
+            "type" : "boolean",
+            "description" : "The number of visits observed in the long term window, stratified by visit concept ID. (analysis ID 923)",
+            "default" : false
+          },
+          "useVisitConceptCountMediumTerm" : {
+            "type" : "boolean",
+            "description" : "The number of visits observed in the medium term window, stratified by visit concept ID. (analysis ID 924)",
+            "default" : false
+          },
+          "useVisitConceptCountShortTerm" : {
+            "type" : "boolean",
+            "description" : "The number of visits observed in the short term window, stratified by visit concept ID. (analysis ID 925)",
+            "default" : false
+          },
+          "longTermStartDays" : {
+            "type" : "integer",
+            "description" : "What is the start day (relative to the index date) of the long-term window?",
+            "default" : -365
+          },
+          "mediumTermStartDays" : {
+            "type" : "integer",
+            "description" : "What is the start day (relative to the index date) of the medium-term window?",
+            "default" : -180
+          },
+          "shortTermStartDays" : {
+            "type" : "integer",
+            "description" : "What is the start day (relative to the index date) of the short-term window?",
+            "default" : -30
+          },
+          "endDays" : {
+            "type" : "integer",
+            "description" : "What is the end day (relative to the index date) of the window?",
+            "default" : 0
+          },
+          "includedCovariateConceptIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
+            "description" : "A list of concept IDs that should be used to construct covariates.",
+            "default" : [ ]
+          },
+          "addDescendantsToInclude" : {
+            "type" : "boolean",
+            "description" : "Should descendant concept IDs be added to the list of concepts to include?",
+            "default" : false
+          },
+          "excludedCovariateConceptIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
+            "description" : "A list of concept IDs that should NOT be used to construct covariates.",
+            "default" : [ ]
+          },
+          "addDescendantsToExclude" : {
+            "type" : "boolean",
+            "description" : "Should descendant concept IDs be added to the list of concepts to exclude?",
+            "default" : false
+          },
+          "includedCovariateIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
+            "description" : "A list of covariate IDs that should be restricted to.",
+            "default" : [ ]
+          }
+        },
+        "type" : "object"
+      }
+    }
+  }
+}
