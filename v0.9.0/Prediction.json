@@ -57,6 +57,12 @@
             "type" : "string",
             "description" : "Version number of the specification for use by the hydration package"
           },
+          "dependencies" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Dependency"
+            }
+          },
           "createdBy" : {
             "type" : "string",
             "description" : "The person who created the analysis"
@@ -370,7 +376,7 @@
       },
       "CovariateSettings" : {
         "type" : "object",
-        "$ref": "FeatureExtraction.json#/components/schemas/CovariateSettings"
+        "$ref" : "FeatureExtraction.json#/components/schemas/CovariateSettings"
       },
       "GetDbPLPDataArgs" : {
         "description" : "Create a parameter object for the function getPlpData",
@@ -591,6 +597,20 @@
       "ConceptSet" : {
         "type" : "object",
         "$ref" : "ConceptSet.json#/components/schemas/ConceptSet"
+      },
+      "Dependency" : {
+        "description" : "Describes a dependency for the specification",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the dependency"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "The version information of the dependency"
+          }
+        },
+        "type" : "object"
       }
     }
   }

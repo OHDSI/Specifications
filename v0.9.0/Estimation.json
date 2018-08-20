@@ -57,6 +57,12 @@
             "type" : "string",
             "description" : "Version number of the specification for use by the hydration package"
           },
+          "dependencies" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Dependency"
+            }
+          },
           "createdBy" : {
             "type" : "string",
             "description" : "The person who created the specification"
@@ -1109,7 +1115,7 @@
       },
       "CovariateSettings" : {
         "type" : "object",
-        "$ref": "FeatureExtraction.json#/components/schemas/CovariateSettings"
+        "$ref" : "FeatureExtraction.json#/components/schemas/CovariateSettings"
       },
       "StratifyByPsArgs" : {
         "description" : "Defines the set of parameters used when stratifying by propensity score",
@@ -1827,6 +1833,20 @@
             "description" : "The name of the negative control cohort"
           }
         }
+      },
+      "Dependency" : {
+        "description" : "Describes a dependency for the specification",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the dependency"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "The version information of the dependency"
+          }
+        },
+        "type" : "object"
       }
     }
   }
