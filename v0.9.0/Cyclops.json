@@ -1,0 +1,196 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "Cyclops Specification",
+    "url" : "https://github.com/OHDSI/Specifications/v0.9.0/Cyclops"
+  } ],
+  "info" : {
+    "description" : "Cyclops",
+    "version" : "0.9.0",
+    "title" : "Cyclops",
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "paths" : {
+    "/" : {
+      "get" : {
+        "summary" : "Get a list of cyclops options",
+        "operationId" : "getCyclops",
+        "description" : "This is a placeholder method",
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Prior"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Prior" : {
+        "description" : "creates a Cyclops prior object for use with fitCyclopsModel.",
+        "required" : [ "priorType" ],
+        "properties" : {
+          "priorType" : {
+            "type" : "string",
+            "description" : "Specifies prior distribution. We specify all priors in terms of their variance parameters. Similar fitting tools for regularized regression often parameterize the Laplace distribution in terms of a rate \"lambda\" per observation. See \"glmnet\", for example.  variance = 2 * / (nobs * lambda)^2 or lambda = sqrt(2 / variance) / nobs"
+          },
+          "variance" : {
+            "type" : "integer",
+            "description" : "prior distribution variance"
+          },
+          "exclude" : {
+            "type" : "array",
+            "description" : "A vector of numbers or covariateId names to exclude from prior",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "graph" : {
+            "type" : "string",
+            "description" : "Child-to-parent mapping for a hierarchical prior            ",
+            "default" : null
+          },
+          "neighborhood" : {
+            "type" : "string",
+            "description" : "A list of first-order neighborhoods for a partially fused prior",
+            "default" : null
+          },
+          "useCrossValidation" : {
+            "type" : "boolean",
+            "description" : "Perform cross-validation to determine prior variance.",
+            "default" : false
+          },
+          "forceIntercept" : {
+            "type" : "boolean",
+            "description" : "Force intercept coefficient into prior",
+            "default" : false
+          }
+        },
+        "type" : "object"
+      },
+      "Control" : {
+        "description" : "creates a Cyclops control object for use with fitCyclopsModel.",
+        "properties" : {
+          "maxIterations" : {
+            "type" : "integer",
+            "description" : "maximum iterations of Cyclops to attempt before returning a failed-to-converge error ",
+            "default" : 1000
+          },
+          "tolerance" : {
+            "type" : "integer",
+            "description" : "maximum relative change in convergence criterion from successive iterations to achieve convergence",
+            "default" : 1000000
+          },
+          "convergenceType" : {
+            "type" : "string",
+            "description" : "name of convergence criterion to employ",
+            "default" : "gradient"
+          },
+          "cvType" : {
+            "type" : "string",
+            "description" : "name of cross validation search. Option \"auto\" selects an auto-search following BBR. Option \"grid\" selects a grid-search cross validation ",
+            "default" : "auto"
+          },
+          "fold" : {
+            "type" : "integer",
+            "description" : "Number of random folds to employ in cross validation",
+            "default" : 10
+          },
+          "lowerLimit" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "Lower prior variance limit for grid-search",
+            "default" : 0.01
+          },
+          "upperLimit" : {
+            "type" : "number",
+            "description" : "Upper prior variance limit for grid-search",
+            "default" : 20
+          },
+          "gridSteps" : {
+            "type" : "number",
+            "description" : "Number of steps in grid-search",
+            "default" : 10
+          },
+          "cvRepetitions" : {
+            "type" : "number",
+            "description" : "Number of repetitions of X-fold cross validation",
+            "default" : 1
+          },
+          "minCVData" : {
+            "type" : "number",
+            "description" : "Minumim number of data for cross validation",
+            "default" : 100
+          },
+          "noiseLevel" : {
+            "type" : "string",
+            "description" : "level of Cyclops screen output (\"silent\", \"quiet\", \"noisy\")",
+            "default" : "silent"
+          },
+          "threads" : {
+            "type" : "number",
+            "description" : "Specify number of CPU threads to employ in cross-validation; default = 1 (auto = -1)",
+            "default" : 1
+          },
+          "seed" : {
+            "type" : "number",
+            "description" : "Specify random number generator seed. A null value sets seed via Sys.time.",
+            "default" : null
+          },
+          "resetCoefficients" : {
+            "type" : "boolean",
+            "description" : "Reset all coefficients to 0 between model fits under cross-validation",
+            "default" : false
+          },
+          "startingVariance" : {
+            "type" : "number",
+            "description" : "Starting variance for auto-search cross-validation; default = -1 (use estimate based on data)",
+            "default" : -1
+          },
+          "useKKTSwindle" : {
+            "type" : "boolean",
+            "description" : "Use the Karush-Kuhn-Tucker conditions to limit search",
+            "default" : false
+          },
+          "tuneSwindle" : {
+            "type" : "number",
+            "description" : "Size multiplier for active set",
+            "default" : 10
+          },
+          "selectorType" : {
+            "type" : "string",
+            "description" : "name of exchangeable sampling unit. Option \"byPid\" selects entire strata. Option \"byRow\" selects single rows. If set to \"auto\", \"byRow\" will be used for all models except conditional models where the average number of rows per stratum is smaller than the number of strata.",
+            "default" : "auto"
+          },
+          "initialBound" : {
+            "type" : "number",
+            "description" : "Starting trust-region size",
+            "default" : 2
+          },
+          "maxBoundCount" : {
+            "type" : "number",
+            "description" : "Maximum number of tries to decrease initial trust-region size",
+            "default" : 5
+          }
+        },
+        "type" : "object"
+      }
+    }
+  }
+}
