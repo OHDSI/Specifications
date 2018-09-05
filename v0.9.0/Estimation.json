@@ -57,11 +57,20 @@
             "type" : "string",
             "description" : "Version number of the specification for use by the hydration package"
           },
-          "dependencies" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/Dependency"
-            }
+          "packageName" : {
+            "type" : "string",
+            "description" : "The name of the R Package for execution"
+          },
+          "skeletonType" : {
+            "type" : "string",
+            "description" : "The base skeleton R package",
+            "default" : "ComparativeEffectStudy",
+            "enum" : [ "ComparativeEffectStudy" ]
+          },
+          "skeletonVersion" : {
+            "type" : "string",
+            "description" : "The cooresponding skelecton version to use",
+            "default" : "v0.0.1"
           },
           "createdBy" : {
             "type" : "string",
@@ -99,11 +108,15 @@
               "$ref" : "#/components/schemas/NegativeControl"
             }
           },
-          "injectSignalsArgs" : {
-            "$ref" : "#/components/schemas/InjectSignalsArgs"
+          "positiveControlSynthesisArgs" : {
+            "$ref" : "#/components/schemas/PositiveControlSynthesisArgs"
           },
           "negativeControlCohortDefinition" : {
-            "$ref" : "#/components/schemas/NegativeControlCohortExpression"
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/NegativeControlOutcomeCohortExpression"
+            }, {
+              "$ref" : "#/components/schemas/NegativeControlExposureCohortExpression"
+            } ]
           },
           "estimationAnalysisSettings" : {
             "$ref" : "#/components/schemas/EstimationAnalysisSettings"
@@ -1472,46 +1485,28 @@
             }
           },
           "prior" : {
-            "description" : "The prior used to fit the model.",
             "$ref" : "#/components/schemas/Prior"
           },
           "control" : {
-            "description" : "The control object used to control the cross-validation used todetermine the hyperparameters of the prior (if applicable). ",
             "$ref" : "#/components/schemas/Control"
           }
         },
         "type" : "object"
       },
       "Prior" : {
-        "$ref" : "Cyclops.json#/components/schemas/Prior",
-        "type" : "object"
+        "$ref" : "Cyclops.json#/components/schemas/Prior"
       },
       "Control" : {
-        "$ref" : "Cyclops.json#/components/schemas/Control",
-        "type" : "object"
+        "$ref" : "Cyclops.json#/components/schemas/Control"
       },
-      "InjectSignalsArgs" : {
-        "description" : "Inject signals in the database",
+      "PositiveControlSynthesisArgs" : {
+        "description" : "Positive control synthesis arguments",
         "properties" : {
-          "exposureOutcomePairs" : {
-            "$ref" : "#/components/schemas/TargetOutcome",
-            "description" : "'A data frame with at least two columns -     1. exposureId containing the drug_concept_ID or cohort_concept_id of the exposure variable    2. outcomeId containing the condition_concept_ID or cohort_concept_id of the outcome variable'"
-          },
           "modelType" : {
             "type" : "string",
             "description" : "Can be either \"poisson\" or \"survival\"",
             "default" : "poisson",
             "enum" : [ "poisson", "survival" ]
-          },
-          "buildOutcomeModel" : {
-            "type" : "boolean",
-            "description" : "Should an outcome model be created to predict outcomes. New outcomes will be inserted based on the predicted probabilities according to this model, and this will help preserve the observed confounding when injecting signals.",
-            "default" : true
-          },
-          "buildModelPerExposure" : {
-            "type" : "boolean",
-            "description" : "If TRUE, an outcome model will be created for each exposure ID. IF false, outcome models will be created across all exposures.",
-            "default" : false
           },
           "minOutcomeCountForModel" : {
             "type" : "integer",
@@ -1596,63 +1591,13 @@
         "type" : "object"
       },
       "CohortDefinition" : {
-        "description" : "The set of persons satisfying one or more inclusion criteria for a duration of time",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "The identifier for the cohort"
-          },
-          "name" : {
-            "type" : "string",
-            "description" : "The name of the cohort"
-          },
-          "description" : {
-            "type" : "string",
-            "description" : "The description of the cohort"
-          },
-          "expressionType" : {
-            "type" : "string",
-            "description" : "Type of cohort definition",
-            "default" : "SIMPLE_EXPRESSION"
-          },
-          "expression" : {
-            "oneOf" : [ {
-              "$ref" : "#/components/schemas/CohortExpression"
-            }, {
-              "$ref" : "#/components/schemas/NegativeControlCohortExpression"
-            } ]
-          },
-          "createdBy" : {
-            "type" : "string",
-            "description" : "The person who created the cohort"
-          },
-          "createdDate" : {
-            "type" : "string",
-            "format" : "datetime",
-            "description" : "The date and time the cohort was first saved"
-          },
-          "modifiedBy" : {
-            "type" : "string",
-            "description" : "The person who crea upte d"
-          },
-          "modifiedDate" : {
-            "type" : "string",
-            "format" : "datetime",
-            "description" : "The date and time the cohort was last saved"
-          }
-        },
-        "type" : "object"
-      },
-      "CohortExpression" : {
-        "type" : "object",
         "$ref" : "CohortDefinition.json#/components/schemas/CohortDefinition"
       },
       "ConceptSet" : {
-        "type" : "object",
         "$ref" : "ConceptSet.json#/components/schemas/ConceptSet"
       },
-      "NegativeControlCohortExpression" : {
-        "description" : "The expression that defines the criteria for inclusion and duration of time for cohorts intended for use as negative controls. The following describes the criteria of the cohort expression using its properties |<occurrenceType> occurrence(s) of <negativeControlConceptSet.conceptId> and <negativeControlSet.detectOnDescendants> in <domain> in a person’s history |This expression will be evaluated for each conceptId in the negativeControlConceptSet",
+      "NegativeControlOutcomeCohortExpression" : {
+        "description" : "The expression that defines the criteria for inclusion and duration of time for cohorts intended for use as negative control outcomes. The following describes the criteria of the cohort expression using its properties |<occurrenceType> occurrence(s) of <negativeControlConceptSet.conceptId> and <negativeControlSet.detectOnDescendants> in <domain> in a person’s history |This expression will be evaluated for each conceptId in the negativeControlConceptSet",
         "properties" : {
           "occurrenceType" : {
             "type" : "string",
@@ -1670,6 +1615,10 @@
             }
           }
         },
+        "type" : "object"
+      },
+      "NegativeControlExposureCohortExpression" : {
+        "description" : "The expression that defines the criteria for inclusion and duration of time for cohorts intended for use as negative control exposures. This model is stillunder desgin and is a placholder for now.",
         "type" : "object"
       },
       "NegativeControl" : {
@@ -1690,19 +1639,10 @@
           "outcomeName" : {
             "type" : "string",
             "description" : "The name of the negative control cohort"
-          }
-        }
-      },
-      "Dependency" : {
-        "description" : "Describes a dependency for the specification",
-        "properties" : {
-          "name" : {
-            "type" : "string",
-            "description" : "The name of the dependency"
           },
-          "version" : {
+          "type" : {
             "type" : "string",
-            "description" : "The version information of the dependency"
+            "description" : "The type of negative control"
           }
         },
         "type" : "object"
