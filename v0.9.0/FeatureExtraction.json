@@ -43,7 +43,7 @@
   "components" : {
     "schemas" : {
       "CovariateSettings" : {
-        "description" : "Object to hold covariate settings for use with FeatureExtraction v2.1.4",
+        "description" : "Object to hold covariate settings for use with FeatureExtraction v2.1.5",
         "properties" : {
           "useDemographicsGender" : {
             "type" : "boolean",
@@ -87,7 +87,7 @@
           },
           "useDemographicsPostObservationTime" : {
             "type" : "boolean",
-            "description" : "Number of continuous days of observation time preceding the index date. (analysis ID 9)",
+            "description" : "Number of continuous days of observation time following the index date. (analysis ID 9)",
             "default" : false
           },
           "useDemographicsTimeInCohort" : {
@@ -120,22 +120,22 @@
             "description" : "One covariate per condition in the condition_occurrence table starting in the short term window. (analysis ID 104)",
             "default" : false
           },
-          "useConditionOccurrenceInpatientAnyTimePrior" : {
+          "useConditionOccurrencePrimaryInpatientAnyTimePrior" : {
             "type" : "boolean",
             "description" : "One covariate per condition observed in an inpatient setting in the condition_occurrence table starting any time prior to index. (analysis ID 105)",
             "default" : false
           },
-          "useConditionOccurrenceInpatientLongTerm" : {
+          "useConditionOccurrencePrimaryInpatientLongTerm" : {
             "type" : "boolean",
             "description" : "One covariate per condition observed in an inpatient setting in the condition_occurrence table starting in the long term window. (analysis ID 106)",
             "default" : false
           },
-          "useConditionOccurrenceInpatientMediumTerm" : {
+          "useConditionOccurrencePrimaryInpatientMediumTerm" : {
             "type" : "boolean",
             "description" : "One covariate per condition observed in an inpatient setting in the condition_occurrence table starting in the medium term window. (analysis ID 107)",
             "default" : false
           },
-          "useConditionOccurrenceInpatientShortTerm" : {
+          "useConditionOccurrencePrimaryInpatientShortTerm" : {
             "type" : "boolean",
             "description" : "One covariate per condition observed in an inpatient setting in the condition_occurrence table starting in the short term window. (analysis ID 108)",
             "default" : false
@@ -618,6 +618,14 @@
             },
             "description" : "A list of covariate IDs that should be restricted to.",
             "default" : [ ]
+          },
+          "attr_fun" : {
+            "type" : "string",
+            "default" : "getDbDefaultCovariateData"
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "covariateSettings"
           }
         },
         "type" : "object"

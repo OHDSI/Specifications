@@ -309,7 +309,11 @@
           },
           "followupPeriod" : {
             "type" : "integer",
-            "description" : "Integer to define required time observed after exposure start.                  "
+            "description" : "Integer to define required time observed after exposure start."
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -427,6 +431,10 @@
             "type" : "string",
             "format" : "datetime",
             "description" : "A calendar date specifying the maximum date where data is used. Date format is ’yyyymmdd’.      "
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -508,6 +516,10 @@
             "type" : "boolean",
             "description" : "Should cases with no matched controls be removed?",
             "default" : true
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -517,6 +529,10 @@
         "properties" : {
           "covariateSettings" : {
             "$ref" : "#/components/schemas/CovariateSettings"
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -538,6 +554,10 @@
             "type" : "integer",
             "description" : "The end of the risk window (in days) relative to the index date. This number should be non-positive.",
             "default" : 0
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -571,6 +591,10 @@
           },
           "control" : {
             "$ref" : "#/components/schemas/Control"
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -671,6 +695,10 @@
             "type" : "number",
             "format" : "float",
             "description" : "Maximum age at which patient time will be included in the analysis. Age should be specified in years, but non-integer values are allowed. If not specified, no age restriction will be applied."
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -700,6 +728,10 @@
               "type" : "integer"
             },
             "default" : [ -60 ]
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -743,7 +775,11 @@
               "type" : "integer"
             },
             "default" : [ ],
-            "description" : "A list of cohort definition IDS identifying the records in the customCovariateTable to use for building customcovariates.                      "
+            "description" : "A list of cohort definition IDS identifying the records in the customCovariateTable to use for building customcovariates.     "
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -783,6 +819,10 @@
             "type" : "boolean",
             "description" : "Should the extension proposed by Farrington et al. be used to adjust for event-dependent observation time?",
             "default" : 1
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -913,8 +953,11 @@
             "$ref" : "#/components/schemas/Prior"
           },
           "control" : {
-            "descripton" : "The control object used to control the cross-validation used to determine the hyperparameters of the prior (if applicable).",
             "$ref" : "#/components/schemas/Control"
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -1122,6 +1165,10 @@
               "description" : "An object representing the arguments to be used when calling the fitOutcomeModel function.",
               "$ref" : "#/components/schemas/FitOutcomeModelArgs",
               "default" : null
+            },
+            "attr_class" : {
+              "type" : "string",
+              "default" : "args"
             }
           }
         } ]
@@ -1153,6 +1200,10 @@
             "description" : "Names of one or more columns in the data data.frame on which subjects should also be stratified in addition to stratification on propensity score.",
             "default" : [ ],
             "x-ohdsi-atlas-display" : false
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -1178,6 +1229,10 @@
             "items" : {
               "type" : "integer"
             }
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -1231,6 +1286,10 @@
           "covariateSettings" : {
             "$ref" : "#/components/schemas/CovariateSettings",
             "description" : "An object of type covariateSettings as created using the createCovariateSettings function in the FeatureExtraction package."
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -1297,6 +1356,10 @@
           "censorAtNewRiskWindow" : {
             "type" : "boolean",
             "description" : "If a subject is in multiple cohorts, should time-at-risk be censored when the new time-at-risk start to prevent overlap?"
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -1344,6 +1407,10 @@
             "$ref" : "#/components/schemas/Control",
             "description" : "The control object used to control the cross-validation used to determine the hyperparameters of the prior (if applicable). ",
             "default" : [ "noiseLevel = 'silent'", "cvType = 'auto'", "tolerance =  2e-07", "cvRepetitions = 10", "startingVariance = 0.01" ]
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -1356,6 +1423,10 @@
             "format" : "float",
             "description" : "This fraction will be removed from each target group. In the target group, persons with the highest propensity scores will be removed, in the comparator group person with the lowest scores will be removed.",
             "default" : 0.05
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -1371,6 +1442,10 @@
               "type" : "number",
               "format" : "float"
             }
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -1401,6 +1476,10 @@
             "items" : {
               "type" : "string"
             }
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -1431,6 +1510,10 @@
             "items" : {
               "type" : "integer"
             }
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"
@@ -1489,6 +1572,10 @@
           },
           "control" : {
             "$ref" : "#/components/schemas/Control"
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "args"
           }
         },
         "type" : "object"

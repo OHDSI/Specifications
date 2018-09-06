@@ -5,7 +5,7 @@
     "url" : "https://github.com/OHDSI/Specifications/v0.9.0/Cyclops"
   } ],
   "info" : {
-    "description" : "Cyclops",
+    "description" : "Based on OHDSI Cyclops (https://github.com/OHDSI/FeatureExtraction)",
     "version" : "0.9.0",
     "title" : "Cyclops",
     "license" : {
@@ -80,6 +80,10 @@
             "type" : "boolean",
             "description" : "Force intercept coefficient into prior",
             "default" : false
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "cyclopsPrior"
           }
         },
         "type" : "object"
@@ -187,6 +191,10 @@
             "type" : "number",
             "description" : "Maximum number of tries to decrease initial trust-region size",
             "default" : 5
+          },
+          "attr_class" : {
+            "type" : "string",
+            "default" : "cyclopsControl"
           }
         },
         "type" : "object"
