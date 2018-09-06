@@ -1168,7 +1168,7 @@
             },
             "attr_class" : {
               "type" : "string",
-              "default" : "args"
+              "default" : "cmAnalysis"
             }
           }
         } ]
