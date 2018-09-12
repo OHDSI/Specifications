@@ -108,6 +108,10 @@
               "$ref" : "#/components/schemas/NegativeControl"
             }
           },
+          "doPostivieControlSynthesis" : {
+            "type" : "boolean",
+            "default" : false
+          },
           "positiveControlSynthesisArgs" : {
             "$ref" : "#/components/schemas/PositiveControlSynthesisArgs"
           },
@@ -120,9 +124,6 @@
           },
           "estimationAnalysisSettings" : {
             "$ref" : "#/components/schemas/EstimationAnalysisSettings"
-          },
-          "empiricalCalibrationSettings" : {
-            "$ref" : "#/components/schemas/EmpiricalCalibrationSettings"
           },
           "estimationOutputSetttings" : {
             "$ref" : "#/components/schemas/EstimationOutputSettings"
@@ -962,24 +963,6 @@
         },
         "type" : "object"
       },
-      "EmpiricalCalibrationSettings" : {
-        "description" : "The settings used for performing empirical calibration",
-        "properties" : {
-          "analysisIds" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/Analysis"
-            }
-          },
-          "negativeControlSets" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/TargetComparatorOutcomes"
-            }
-          }
-        },
-        "type" : "object"
-      },
       "EstimationOutputSettings" : {
         "description" : "Speciifes the diagnostic information to produce from the estimation analysis",
         "properties" : {
@@ -1075,12 +1058,10 @@
               "default" : null
             },
             "getDbCohortMethodDataArgs" : {
-              "$ref" : "#/components/schemas/GetDbCohortMethodDataArgs",
-              "description" : "An object representing the arguments to be used when calling the getDbCohortMethodData function."
+              "$ref" : "#/components/schemas/GetDbCohortMethodDataArgs"
             },
             "createStudyPopArgs" : {
-              "$ref" : "#/components/schemas/CreateStudyPopulationArgs",
-              "description" : "An object representing the arguments to be used when calling the createStudyPopulation function."
+              "$ref" : "#/components/schemas/CreateStudyPopulationArgs"
             },
             "createPs" : {
               "type" : "boolean",
@@ -1088,8 +1069,7 @@
               "default" : false
             },
             "createPsArgs" : {
-              "$ref" : "#/components/schemas/CreatePsArgs",
-              "default" : null
+              "$ref" : "#/components/schemas/CreatePsArgs"
             },
             "trimByPs" : {
               "type" : "boolean",
@@ -1097,8 +1077,7 @@
               "default" : false
             },
             "trimByPsArgs" : {
-              "$ref" : "#/components/schemas/TrimByPsArgs",
-              "default" : null
+              "$ref" : "#/components/schemas/TrimByPsArgs"
             },
             "trimByPsToEquipoise" : {
               "type" : "boolean",
