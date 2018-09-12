@@ -108,7 +108,7 @@
               "$ref" : "#/components/schemas/NegativeControl"
             }
           },
-          "doPostivieControlSynthesis" : {
+          "doPositiveControlSynthesis" : {
             "type" : "boolean",
             "default" : false
           },
