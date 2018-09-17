@@ -169,47 +169,39 @@
       },
       "ComparativeCohortAnalysis" : {
         "description" : "Holds the input parameters required to run a comparative cohort analysis using CohortMethod v3.0.0",
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/Analysis"
-        }, {
-          "type" : "object",
-          "properties" : {
-            "targetComparatorOutcomes" : {
-              "type" : "array",
-              "description" : "The list of targetComparatorOutcomes",
-              "items" : {
-                "$ref" : "#/components/schemas/TargetComparatorOutcomes"
-              }
-            },
-            "cohortMethodAnalysisList" : {
-              "type" : "array",
-              "description" : "The list of comparative cohort analyses for CohortMethod",
-              "items" : {
-                "$ref" : "#/components/schemas/CohortMethodAnalysis"
-              }
+        "type" : "object",
+        "properties" : {
+          "targetComparatorOutcomes" : {
+            "type" : "array",
+            "description" : "The list of targetComparatorOutcomes",
+            "items" : {
+              "$ref" : "#/components/schemas/TargetComparatorOutcomes"
+            }
+          },
+          "cohortMethodAnalysisList" : {
+            "type" : "array",
+            "description" : "The list of comparative cohort analyses for CohortMethod",
+            "items" : {
+              "$ref" : "#/components/schemas/CohortMethodAnalysis"
             }
           }
-        } ]
+        }
       },
       "SelfControlledCohortAnalysis" : {
         "description" : "Holds the input parameters required to run a self-controlled cohort analysis using SelfControlledCohort v1.4.1",
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/Analysis"
-        }, {
-          "type" : "object",
-          "properties" : {
-            "targetOutcomePairList" : {
-              "type" : "array",
-              "description" : "The list of target and outcomes to test",
-              "items" : {
-                "$ref" : "#/components/schemas/TargetOutcome"
-              }
-            },
-            "analysisList" : {
-              "$ref" : "#/components/schemas/SelfControlledCohortAnalysisSettings"
+        "type" : "object",
+        "properties" : {
+          "targetOutcomePairList" : {
+            "type" : "array",
+            "description" : "The list of target and outcomes to test",
+            "items" : {
+              "$ref" : "#/components/schemas/TargetOutcome"
             }
+          },
+          "analysisList" : {
+            "$ref" : "#/components/schemas/SelfControlledCohortAnalysisSettings"
           }
-        } ]
+        }
       },
       "SelfControlledCohortAnalysisSettings" : {
         "description" : "Conforms to object created by the createSccAnalysis function of SelfControlledCohort",
@@ -321,23 +313,19 @@
       },
       "SelfControlledCaseSeriesAnalysis" : {
         "description" : "Holds the input parameters required to run a self-controlled case series analysis using SelfControlledCaseSeries v1.3.0",
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/Analysis"
-        }, {
-          "type" : "object",
-          "properties" : {
-            "targetOutcomePairList" : {
-              "type" : "array",
-              "description" : "The list of target and outcomes to test",
-              "items" : {
-                "$ref" : "#/components/schemas/TargetOutcome"
-              }
-            },
-            "analysisList" : {
-              "$ref" : "#/components/schemas/SelfControlledCaseSeriesAnalysisSettings"
+        "type" : "object",
+        "properties" : {
+          "targetOutcomePairList" : {
+            "type" : "array",
+            "description" : "The list of target and outcomes to test",
+            "items" : {
+              "$ref" : "#/components/schemas/TargetOutcome"
             }
+          },
+          "analysisList" : {
+            "$ref" : "#/components/schemas/SelfControlledCaseSeriesAnalysisSettings"
           }
-        } ]
+        }
       },
       "SelfControlledCaseSeriesAnalysisSettings" : {
         "description" : "Conforms to object created by the createSccsAnalysis function of SelfControlledCaseSeries",
@@ -369,40 +357,36 @@
       },
       "CaseControlAnalysis" : {
         "description" : "Holds the input parameters required to run a case control analysis using CaseControl v1.4.0.This object represents the arguments to be used when calling the runCcAnalyses function.",
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/Analysis"
-        }, {
-          "type" : "object",
-          "properties" : {
-            "exposureType" : {
-              "type" : "integer",
-              "description" : "If more than one exposure is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific exposure to use in this analysis."
-            },
-            "outcomeType" : {
-              "type" : "integer",
-              "description" : "If more than one outcome is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific outcome to use in this analysis."
-            },
-            "nestingCohortType" : {
-              "type" : "integer",
-              "description" : "If more than one nesting cohort is provided for each exposureOutcomeNesting-Cohort, this field should be used to select the specific nesting cohort to use in this analysis."
-            },
-            "getDbCaseDataArgs" : {
-              "$ref" : "#/components/schemas/GetDbCaseDataArgs"
-            },
-            "selectControlsArgs" : {
-              "$ref" : "#/components/schemas/SelectControlsArgs"
-            },
-            "getDbExposureDataArgs" : {
-              "$ref" : "#/components/schemas/GetDbExposureDataArgs"
-            },
-            "createCaseControlDataArgs" : {
-              "$ref" : "#/components/schemas/CaseControlDataArgs"
-            },
-            "fitCaseControlModelArgs" : {
-              "$ref" : "#/components/schemas/FitCaseControlModelArgs"
-            }
+        "type" : "object",
+        "properties" : {
+          "exposureType" : {
+            "type" : "integer",
+            "description" : "If more than one exposure is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific exposure to use in this analysis."
+          },
+          "outcomeType" : {
+            "type" : "integer",
+            "description" : "If more than one outcome is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific outcome to use in this analysis."
+          },
+          "nestingCohortType" : {
+            "type" : "integer",
+            "description" : "If more than one nesting cohort is provided for each exposureOutcomeNesting-Cohort, this field should be used to select the specific nesting cohort to use in this analysis."
+          },
+          "getDbCaseDataArgs" : {
+            "$ref" : "#/components/schemas/GetDbCaseDataArgs"
+          },
+          "selectControlsArgs" : {
+            "$ref" : "#/components/schemas/SelectControlsArgs"
+          },
+          "getDbExposureDataArgs" : {
+            "$ref" : "#/components/schemas/GetDbExposureDataArgs"
+          },
+          "createCaseControlDataArgs" : {
+            "$ref" : "#/components/schemas/CaseControlDataArgs"
+          },
+          "fitCaseControlModelArgs" : {
+            "$ref" : "#/components/schemas/FitCaseControlModelArgs"
           }
-        } ]
+        }
       },
       "GetDbCaseDataArgs" : {
         "description" : "An object representing the arguments to be used when calling the createGetDbCaseDataArgs function.",
@@ -602,34 +586,30 @@
       },
       "CaseCrossoverAnalysis" : {
         "description" : "Holds the input parameters required to run a case crossover analysis using CaseCrossover v1.0.1.This object represents the arguments to be used when calling the runCcrAnalyses function.",
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/Analysis"
-        }, {
-          "type" : "object",
-          "properties" : {
-            "exposureType" : {
-              "type" : "integer",
-              "description" : "If more than one exposure is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific exposure to use in this analysis."
-            },
-            "outcomeType" : {
-              "type" : "integer",
-              "description" : "If more than one outcome is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific outcome to use in this analysis."
-            },
-            "nestingCohortType" : {
-              "type" : "integer",
-              "description" : "If more than one nesting cohort is provided for each exposureOutcomeNesting-Cohort, this field should be used to select the specific nesting cohort to use in this analysis."
-            },
-            "getDbCaseCrossoverDataArgs" : {
-              "$ref" : "#/components/schemas/DbCaseCrossoverData"
-            },
-            "selectSubjectsToIncludeArgs" : {
-              "$ref" : "#/components/schemas/SelectSubjectsToIncludeArgs"
-            },
-            "getExposureStatusArgs" : {
-              "$ref" : "#/components/schemas/GetExposureStatusArgs"
-            }
+        "type" : "object",
+        "properties" : {
+          "exposureType" : {
+            "type" : "integer",
+            "description" : "If more than one exposure is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific exposure to use in this analysis."
+          },
+          "outcomeType" : {
+            "type" : "integer",
+            "description" : "If more than one outcome is provided for each exposureOutcomeNestingCohort, this field should be used to select the specific outcome to use in this analysis."
+          },
+          "nestingCohortType" : {
+            "type" : "integer",
+            "description" : "If more than one nesting cohort is provided for each exposureOutcomeNesting-Cohort, this field should be used to select the specific nesting cohort to use in this analysis."
+          },
+          "getDbCaseCrossoverDataArgs" : {
+            "$ref" : "#/components/schemas/DbCaseCrossoverData"
+          },
+          "selectSubjectsToIncludeArgs" : {
+            "$ref" : "#/components/schemas/SelectSubjectsToIncludeArgs"
+          },
+          "getExposureStatusArgs" : {
+            "$ref" : "#/components/schemas/GetExposureStatusArgs"
           }
-        } ]
+        }
       },
       "DbCaseCrossoverData" : {
         "description" : "Create a parameter object for the function getDbCaseCrossoverData",
@@ -1085,9 +1065,7 @@
               "default" : false
             },
             "trimByPsToEquipoiseArgs" : {
-              "$ref" : "#/components/schemas/TrimByPsToEquipoiseArgs",
-              "description" : "An object representing the arguments to be used when calling the trimByPsToEquipoise function.",
-              "default" : null
+              "$ref" : "#/components/schemas/TrimByPsToEquipoiseArgs"
             },
             "matchOnPs" : {
               "type" : "boolean",
@@ -1095,9 +1073,7 @@
               "default" : false
             },
             "matchOnPsArgs" : {
-              "$ref" : "#/components/schemas/MatchOnPsArgs",
-              "description" : "An object representing the arguments to be used when calling the matchOnPsAndCovariates function.",
-              "default" : null
+              "$ref" : "#/components/schemas/MatchOnPsArgs"
             },
             "matchOnPsAndCovariates" : {
               "type" : "boolean",
@@ -1105,9 +1081,7 @@
               "default" : false
             },
             "matchOnPsAndCovariatesArgs" : {
-              "$ref" : "#/components/schemas/MatchOnPsAndCovariatesArgs",
-              "description" : "An object representing the arguments to be used when calling the matchOnPsAndCovariates function.",
-              "default" : null
+              "$ref" : "#/components/schemas/MatchOnPsAndCovariatesArgs"
             },
             "stratifyByPs" : {
               "type" : "boolean",
@@ -1115,9 +1089,7 @@
               "default" : false
             },
             "stratifyByPsArgs" : {
-              "$ref" : "#/components/schemas/StratifyByPsArgs",
-              "description" : "An object representing the arguments to be used when calling the stratifyByPs function.",
-              "default" : null
+              "$ref" : "#/components/schemas/StratifyByPsArgs"
             },
             "stratifyByPsAndCovariates" : {
               "type" : "boolean",
@@ -1125,9 +1097,7 @@
               "default" : false
             },
             "stratifyByPsAndCovariatesArgs" : {
-              "$ref" : "#/components/schemas/StratifyByPsAndCovariatesArgs",
-              "description" : "An object representing the arguments to be used when calling the stratifyByPsAndCovariates function.",
-              "default" : null
+              "$ref" : "#/components/schemas/StratifyByPsAndCovariatesArgs"
             },
             "computeCovariateBalance" : {
               "type" : "string",
@@ -1140,10 +1110,7 @@
               "default" : false
             },
             "fitOutcomeModelArgs" : {
-              "type" : "string",
-              "description" : "An object representing the arguments to be used when calling the fitOutcomeModel function.",
-              "$ref" : "#/components/schemas/FitOutcomeModelArgs",
-              "default" : null
+              "$ref" : "#/components/schemas/FitOutcomeModelArgs"
             },
             "attr_class" : {
               "type" : "string",
@@ -1153,7 +1120,6 @@
         } ]
       },
       "CovariateSettings" : {
-        "type" : "object",
         "$ref" : "FeatureExtraction.json#/components/schemas/CovariateSettings"
       },
       "StratifyByPsArgs" : {
@@ -1263,8 +1229,7 @@
             "default" : 0
           },
           "covariateSettings" : {
-            "$ref" : "#/components/schemas/CovariateSettings",
-            "description" : "An object of type covariateSettings as created using the createCovariateSettings function in the FeatureExtraction package."
+            "$ref" : "#/components/schemas/CovariateSettings"
           },
           "attr_class" : {
             "type" : "string",
@@ -1378,14 +1343,10 @@
             "default" : true
           },
           "prior" : {
-            "$ref" : "#/components/schemas/Prior",
-            "description" : "The prior used to fit the model.",
-            "default" : [ "laplace", "exclude = c(0)", "useCrossValidation = TRUE" ]
+            "$ref" : "#/components/schemas/Prior"
           },
           "control" : {
-            "$ref" : "#/components/schemas/Control",
-            "description" : "The control object used to control the cross-validation used to determine the hyperparameters of the prior (if applicable). ",
-            "default" : [ "noiseLevel = 'silent'", "cvType = 'auto'", "tolerance =  2e-07", "cvRepetitions = 10", "startingVariance = 0.01" ]
+            "$ref" : "#/components/schemas/Control"
           },
           "attr_class" : {
             "type" : "string",
