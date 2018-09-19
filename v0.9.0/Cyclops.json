@@ -48,7 +48,9 @@
         "properties" : {
           "priorType" : {
             "type" : "string",
-            "description" : "Specifies prior distribution. We specify all priors in terms of their variance parameters. Similar fitting tools for regularized regression often parameterize the Laplace distribution in terms of a rate \"lambda\" per observation. See \"glmnet\", for example.  variance = 2 * / (nobs * lambda)^2 or lambda = sqrt(2 / variance) / nobs"
+            "description" : "Specifies prior distribution. We specify all priors in terms of their variance parameters. Similar fitting tools for regularized regression often parameterize the Laplace distribution in terms of a rate \"lambda\" per observation. See \"glmnet\", for example.  variance = 2 * / (nobs * lambda)^2 or lambda = sqrt(2 / variance) / nobs",
+            "default" : "laplace",
+            "enum" : [ "none", "laplace", "normal" ]
           },
           "variance" : {
             "type" : "integer",
@@ -104,12 +106,14 @@
           "convergenceType" : {
             "type" : "string",
             "description" : "name of convergence criterion to employ",
-            "default" : "gradient"
+            "default" : "gradient",
+            "enum" : [ "gradient", "mittal", "lange" ]
           },
           "cvType" : {
             "type" : "string",
             "description" : "name of cross validation search. Option \"auto\" selects an auto-search following BBR. Option \"grid\" selects a grid-search cross validation ",
-            "default" : "auto"
+            "default" : "auto",
+            "enum" : [ "auto", "grid" ]
           },
           "fold" : {
             "type" : "integer",

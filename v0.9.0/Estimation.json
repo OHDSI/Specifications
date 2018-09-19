@@ -115,18 +115,14 @@
           "positiveControlSynthesisArgs" : {
             "$ref" : "#/components/schemas/PositiveControlSynthesisArgs"
           },
-          "negativeControlCohortDefinition" : {
-            "oneOf" : [ {
-              "$ref" : "#/components/schemas/NegativeControlOutcomeCohortExpression"
-            }, {
-              "$ref" : "#/components/schemas/NegativeControlExposureCohortExpression"
-            } ]
+          "negativeControlOutcomeCohortDefinition" : {
+            "$ref" : "#/components/schemas/NegativeControlOutcomeCohortExpression"
+          },
+          "negativeControlExposureCohortDefinition" : {
+            "$ref" : "#/components/schemas/NegativeControlExposureCohortExpression"
           },
           "estimationAnalysisSettings" : {
             "$ref" : "#/components/schemas/EstimationAnalysisSettings"
-          },
-          "estimationOutputSetttings" : {
-            "$ref" : "#/components/schemas/EstimationOutputSettings"
           }
         },
         "type" : "object"
@@ -1669,7 +1665,9 @@
           },
           "type" : {
             "type" : "string",
-            "description" : "The type of negative control"
+            "description" : "The type of negative control",
+            "default" : "outcome",
+            "enum" : [ "outcome", "exposure" ]
           }
         },
         "type" : "object"
