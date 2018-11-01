@@ -57,11 +57,9 @@
             "description" : "prior distribution variance"
           },
           "exclude" : {
-            "type" : "array",
+            "type" : "integer",
             "description" : "A vector of numbers or covariateId names to exclude from prior",
-            "items" : {
-              "type" : "integer"
-            }
+            "default" : 0
           },
           "graph" : {
             "type" : "string",
@@ -99,9 +97,9 @@
             "default" : 1000
           },
           "tolerance" : {
-            "type" : "integer",
+            "type" : "number",
             "description" : "maximum relative change in convergence criterion from successive iterations to achieve convergence",
-            "default" : 1000000
+            "default" : 1.0E-6
           },
           "convergenceType" : {
             "type" : "string",
@@ -116,13 +114,12 @@
             "enum" : [ "auto", "grid" ]
           },
           "fold" : {
-            "type" : "integer",
+            "type" : "number",
             "description" : "Number of random folds to employ in cross validation",
             "default" : 10
           },
           "lowerLimit" : {
             "type" : "number",
-            "format" : "float",
             "description" : "Lower prior variance limit for grid-search",
             "default" : 0.01
           },
@@ -149,7 +146,8 @@
           "noiseLevel" : {
             "type" : "string",
             "description" : "level of Cyclops screen output (\"silent\", \"quiet\", \"noisy\")",
-            "default" : "silent"
+            "default" : "silent",
+            "enum" : [ "silent", "quiet", "noisy" ]
           },
           "threads" : {
             "type" : "number",
@@ -195,6 +193,16 @@
             "type" : "number",
             "description" : "Maximum number of tries to decrease initial trust-region size",
             "default" : 5
+          },
+          "autoSearch" : {
+            "type" : "boolean",
+            "description" : "The auto search setting",
+            "default" : true
+          },
+          "algorithm" : {
+            "type" : "string",
+            "description" : "The algorithm setting",
+            "default" : "ccd"
           },
           "attr_class" : {
             "type" : "string",

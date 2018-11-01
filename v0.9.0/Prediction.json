@@ -53,9 +53,17 @@
             "type" : "string",
             "description" : "Name for the PLP specification"
           },
+          "description" : {
+            "type" : "string",
+            "description" : "The description of the study"
+          },
           "version" : {
             "type" : "string",
-            "description" : "Version number of the specification for use by the hydration package"
+            "description" : "Version number of the specification"
+          },
+          "organizationName" : {
+            "type" : "string",
+            "description" : "The organization that produced the specification"
           },
           "packageName" : {
             "type" : "string",
@@ -64,8 +72,8 @@
           "skeletonType" : {
             "type" : "string",
             "description" : "The base skeleton R package",
-            "default" : "PatientLevelPrediction",
-            "enum" : [ "PatientLevelPrediction" ]
+            "default" : "PatientLevelPredictionStudy",
+            "enum" : [ "PatientLevelPredictionStudy" ]
           },
           "skeletonVersion" : {
             "type" : "string",
@@ -102,11 +110,24 @@
               "$ref" : "ConceptSet.json#/components/schemas/ConceptSet"
             }
           },
-          "targetOutcomes" : {
+          "conceptSetCrossReference" : {
             "type" : "array",
-            "description" : "The target and outcome  cohort identifiers",
             "items" : {
-              "$ref" : "#/components/schemas/TargetOutcomes"
+              "$ref" : "#/components/schemas/ConceptSetCrossReference"
+            }
+          },
+          "targetIds" : {
+            "description" : "A list of the cohort IDs from the cohortDefinition collectionfor use as targets in the prediction",
+            "type" : "array",
+            "items" : {
+              "type" : "number"
+            }
+          },
+          "outcomeIds" : {
+            "description" : "A list of the cohort IDs from the cohortDefinition collectionfor use as outcomes in the prediction",
+            "type" : "array",
+            "items" : {
+              "type" : "number"
             }
           },
           "covariateSettings" : {
@@ -125,21 +146,21 @@
             "type" : "array",
             "items" : {
               "anyOf" : [ {
-                "$ref" : "#/components/schemas/NaiveBayes"
+                "$ref" : "#/components/schemas/NaiveBayesSettings"
               }, {
-                "$ref" : "#/components/schemas/RandomForest"
+                "$ref" : "#/components/schemas/RandomForestSettings"
               }, {
-                "$ref" : "#/components/schemas/MultilayerPerceptionModel"
+                "$ref" : "#/components/schemas/MLPSettings"
               }, {
-                "$ref" : "#/components/schemas/KNearestNeighbors"
+                "$ref" : "#/components/schemas/KNNSettings"
               }, {
-                "$ref" : "#/components/schemas/GradientBoostingMachine"
+                "$ref" : "#/components/schemas/GradientBoostingMachineSettings"
               }, {
-                "$ref" : "#/components/schemas/DecisionTree"
+                "$ref" : "#/components/schemas/DecisionTreeSettings"
               }, {
-                "$ref" : "#/components/schemas/AdaBoost"
+                "$ref" : "#/components/schemas/AdaBoostSettings"
               }, {
-                "$ref" : "#/components/schemas/LassoLogisticRegression"
+                "$ref" : "#/components/schemas/LassoLogisticRegressionSettings"
               } ]
             }
           },
@@ -152,22 +173,28 @@
         },
         "type" : "object"
       },
-      "NaiveBayes" : {
+      "NaiveBayesSettings" : {
         "description" : "Specification for a Naive Bayes model",
         "type" : "object"
       },
-      "RandomForest" : {
+      "RandomForestSettings" : {
         "description" : "Specification for a Random Forest model",
         "properties" : {
           "mtries" : {
-            "type" : "integer",
+            "type" : "array",
             "description" : "The number of features to include in each tree (-1 defaults to square root of total features)",
-            "default" : -1
+            "items" : {
+              "type" : "integer"
+            },
+            "default" : [ -1 ]
           },
           "ntrees" : {
-            "type" : "integer",
+            "type" : "array",
             "description" : "The number of trees to build",
-            "default" : 500
+            "items" : {
+              "type" : "integer"
+            },
+            "default" : [ 500 ]
           },
           "maxDepth" : {
             "type" : "array",
@@ -192,19 +219,25 @@
         },
         "type" : "object"
       },
-      "MultilayerPerceptionModel" : {
+      "MLPSettings" : {
         "description" : "Specification for a Multiayer Perception Model",
         "properties" : {
           "size" : {
-            "type" : "integer",
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
             "description" : "The number of hidden nodes",
-            "default" : 4
+            "default" : [ 4 ]
           },
           "alpha" : {
-            "type" : "number",
-            "format" : "float",
+            "type" : "array",
+            "items" : {
+              "type" : "number",
+              "format" : "float"
+            },
             "description" : "The L2 regularisation",
-            "default" : 1.0E-5
+            "default" : [ 1.0E-5 ]
           },
           "seed" : {
             "type" : "number",
@@ -215,22 +248,18 @@
         },
         "type" : "object"
       },
-      "KNearestNeighbors" : {
+      "KNNSettings" : {
         "description" : "Specification for a K Nearest Neighbors Model",
         "properties" : {
           "k" : {
             "type" : "integer",
             "description" : "The number of neighbors to consider",
             "default" : 1000
-          },
-          "indexFolder" : {
-            "type" : "string",
-            "description" : "The directory where the results and intermediate steps are output"
           }
         },
         "type" : "object"
       },
-      "GradientBoostingMachine" : {
+      "GradientBoostingMachineSettings" : {
         "description" : "Specification for a Gradient Boosting Machine Model",
         "properties" : {
           "ntrees" : {
@@ -257,9 +286,12 @@
             "default" : [ 4, 6, 17 ]
           },
           "minRows" : {
-            "type" : "integer",
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
             "description" : "The minimum number of rows required at each end node of the tree",
-            "default" : 20
+            "default" : [ 20 ]
           },
           "learnRate" : {
             "type" : "array",
@@ -279,29 +311,41 @@
         },
         "type" : "object"
       },
-      "DecisionTree" : {
+      "DecisionTreeSettings" : {
         "description" : "Specification for a Decision Tree Model",
         "properties" : {
           "maxDepth" : {
-            "type" : "integer",
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
             "description" : "The maximum depth of the tree",
-            "default" : 10
+            "default" : [ 10 ]
           },
           "minSampleSplit" : {
-            "type" : "integer",
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
             "description" : "The minimum samples per split",
-            "default" : 2
+            "default" : [ 2 ]
           },
           "minSampleLeaf" : {
-            "type" : "integer",
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
             "description" : "The minimum number of samples per leaf",
-            "default" : 10
+            "default" : [ 10 ]
           },
           "minImpurityDecrease" : {
-            "type" : "number",
-            "format" : "float",
+            "type" : "array",
+            "items" : {
+              "type" : "number",
+              "format" : "float"
+            },
             "description" : "Threshold for early stopping in tree growth. A node will split if its impurity is above the threshold, otherwise it is a leaf. ",
-            "default" : 1.0E-7
+            "default" : [ 1.0E-7 ]
           },
           "seed" : {
             "type" : "number",
@@ -312,7 +356,8 @@
           "classWeight" : {
             "type" : "string",
             "description" : "Balance or None",
-            "default" : "None"
+            "default" : "None",
+            "enum" : [ "Balance", "None" ]
           },
           "plot" : {
             "type" : "boolean",
@@ -322,16 +367,22 @@
         },
         "type" : "object"
       },
-      "AdaBoost" : {
+      "AdaBoostSettings" : {
         "description" : "Specification for a Ada Boost Model",
         "properties" : {
           "nEstimators" : {
-            "type" : "integer",
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
             "description" : "The maximum number of estimators at which boosting is terminated",
-            "default" : 50
+            "default" : [ 50 ]
           },
           "learningRate" : {
-            "type" : "integer",
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            },
             "description" : "Learning rate shrinks the contribution of each classifier by learningRate. There is a trade-off between learningRate and nEstimators .",
             "default" : 1
           },
@@ -344,7 +395,7 @@
         },
         "type" : "object"
       },
-      "LassoLogisticRegression" : {
+      "LassoLogisticRegressionSettings" : {
         "description" : "Specification for a Lasso Logistic Regression Model",
         "properties" : {
           "variance" : {
@@ -441,6 +492,11 @@
             "type" : "boolean",
             "description" : "Add the length of exposure the risk window?",
             "default" : true
+          },
+          "attr_class" : {
+            "type" : "string",
+            "description" : "The R class",
+            "default" : "populationSettings"
           }
         },
         "type" : "object"
@@ -485,22 +541,26 @@
         },
         "type" : "object"
       },
-      "TargetOutcomes" : {
-        "description" : "Defines a target cohort ID and a list of outcome cohort IDs of interest",
-        "required" : [ "targetId", "outcomeIds" ],
+      "ConceptSetCrossReference" : {
+        "description" : "Defines the relationship between a concept set and a target object",
         "properties" : {
-          "targetId" : {
-            "type" : "string",
-            "description" : "Target cohort id",
-            "format" : "int32"
+          "conceptSetId" : {
+            "type" : "integer",
+            "description" : "The concept set ID"
           },
-          "outcomeIds" : {
-            "description" : "The list of outcome cohort ids",
-            "type" : "array",
-            "items" : {
-              "type" : "string",
-              "format" : "int32"
-            }
+          "targetName" : {
+            "type" : "string",
+            "description" : "The target object name that will utilize the concept set"
+          },
+          "targetIndex" : {
+            "type" : "string",
+            "format" : "int32",
+            "default" : 0,
+            "description" : "The index of the target object"
+          },
+          "propertyName" : {
+            "type" : "string",
+            "description" : "The property that will hold the list of concept IDs from the resolved concept set"
           }
         },
         "type" : "object"

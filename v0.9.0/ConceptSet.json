@@ -1,13 +1,13 @@
 {
   "openapi" : "3.0.0",
   "servers" : [ {
-    "description" : "Defines a Concept Set",
-    "url" : "https://github.com/OHDSI/Specifications/v0.9.0/ConceptSet"
+    "description" : "Defines a Concept Set Expression",
+    "url" : "https://github.com/OHDSI/Specifications/ConceptSetExpression/0.9.0"
   } ],
   "info" : {
     "description" : "Concept Set definition based on OHDSI WebAPI definition(https://github.com/OHDSI/WebAPI/tree/master/src/main/java/org/ohdsi/webapi/conceptset) and Concept Set Expression based on OHDSI circe-be definition (https://github.com/OHDSI/circe-be/blob/master/src/main/java/org/ohdsi/circe/vocabulary/ConceptSetExpression.java)",
     "version" : "0.9.0",
-    "title" : "Concept Set",
+    "title" : "Concept Set Expression",
     "license" : {
       "name" : "Apache 2.0",
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
